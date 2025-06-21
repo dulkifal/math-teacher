@@ -14,9 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error("GET /api/score error:", error);
       return res.status(500).json({ error: "Database error" });
     }
-  }
-
-  if (req.method === "POST") {
+  } else if (req.method === "POST") {
     const { userId, score } = req.body;
     if (!userId) return res.status(400).json({ error: "Missing userId" });
     try {
@@ -30,7 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error("POST /api/score error:", error);
       return res.status(500).json({ error: "Database error" });
     }
+  } else {
+    res.setHeader("Allow", ["GET", "POST"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-
-  res.status(405).end();
 }
