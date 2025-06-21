@@ -2,6 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === "OPTIONS") {
+    res.setHeader("Allow", ["GET", "POST", "OPTIONS"]);
+    return res.status(200).end();
+  }
   if (req.method === "GET") {
     const { userId } = req.query;
     if (!userId) return res.status(400).json({ error: "Missing userId" });
@@ -29,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ error: "Database error" });
     }
   } else {
-    res.setHeader("Allow", ["GET", "POST"]);
+    res.setHeader("Allow", ["GET", "POST", "OPTIONS"]);
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
