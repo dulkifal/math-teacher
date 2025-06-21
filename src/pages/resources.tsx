@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Navbar from "../components/Navbar";
 
 const resources = [
@@ -36,9 +37,9 @@ export default function Resources() {
       <ul className="list-disc list-inside">
         {resources.map((resource, index) => (
           <li key={index} className="mb-2">
-            <a href={resource.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+            <Link href={resource.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
               {resource.title}
-            </a>: {resource.description}
+            </Link>: {resource.description}
           </li>
         ))}
       </ul>
