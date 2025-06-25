@@ -4,8 +4,18 @@ import { animated } from "react-spring";
 import useMeasure from "react-use-measure";
 import { useWindowSize } from "react-use";
 
+// Type for a 2D point
+type Point = { x: number; y: number };
+
+// Props for DraggablePoint
+interface DraggablePointProps {
+  position: Point;
+  onDrag: (pos: Point) => void;
+  color: string;
+}
+
 // Helper to get angle from 0 to 2*PI radians, sweeping counter-clockwise from startPoint to endPoint
-function getAngleFromAToB(center: { x: any; y: any; }, startPoint: { x: any; y: any; }, endPoint: never) {
+function getAngleFromAToB(center: Point, startPoint: Point, endPoint: Point): number {
   const angleStart = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
   const angleEnd = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
 
@@ -16,7 +26,7 @@ function getAngleFromAToB(center: { x: any; y: any; }, startPoint: { x: any; y: 
   return angle; // in radians
 }
 
-function getArcPath(center, startPoint, endPoint, radius, largeArcFlag, sweepFlag) {
+function getArcPath(center: Point, startPoint: Point, endPoint: Point, radius: number, largeArcFlag: boolean, sweepFlag: boolean): string {
   const startAngle = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
   const endAngle = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
 
@@ -30,7 +40,7 @@ function getArcPath(center, startPoint, endPoint, radius, largeArcFlag, sweepFla
 }
 
 // Function to get the midpoint for angle text
-function getAngleTextMidpoint(center, startPoint, endPoint, radius, isCounterClockwise) {
+function getAngleTextMidpoint(center: Point, startPoint: Point, endPoint: Point, radius: number, isCounterClockwise: boolean): Point {
   const startAngle = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
   const endAngle = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
 
@@ -53,7 +63,7 @@ function getAngleTextMidpoint(center, startPoint, endPoint, radius, isCounterClo
 }
 
 // NEW COMPONENT FOR DRAGGABLE POINTS
-function DraggablePoint({ position, onDrag, color }) {
+function DraggablePoint({ position, onDrag, color }: DraggablePointProps) {
   const bind = useDrag((state) => {
     onDrag({ x: state.offset[0], y: state.offset[1] });
   }, {
@@ -89,7 +99,7 @@ export default function AnglePage() {
 
 
   // Optimized drag handlers for fixed points using useCallback
-  const handleDragA = useCallback((newPosition) => {
+  const handleDragA = useCallback((newPosition ) => {
     setPointA(newPosition);
   }, []);
 
