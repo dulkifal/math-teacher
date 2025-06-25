@@ -3,7 +3,6 @@ import { useDrag } from "react-use-gesture";
 import { animated } from "react-spring";
 import useMeasure from "react-use-measure";
 import { useWindowSize } from "react-use";
-import { useClerk } from "@clerk/nextjs";
 
 // Helper to get angle from 0 to 2*PI radians, sweeping counter-clockwise from startPoint to endPoint
 function getAngleFromAToB(center, startPoint, endPoint) {
