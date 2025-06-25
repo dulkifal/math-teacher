@@ -1,4 +1,5 @@
 
+import Image from "next/image";
 import Link from "next/link";
 
 export default function RationalNumbers() {
@@ -33,7 +34,7 @@ export default function RationalNumbers() {
           <div className="p-4 bg-white rounded shadow">
             <b>1. Place Rational Numbers on a Number Line (2D):</b>
             <div className="my-2">
-              <img
+              <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Number-line.svg/512px-Number-line.svg.png"
                 alt="Number line"
                 className="w-full max-w-md mx-auto my-2"
@@ -72,7 +73,7 @@ export default function RationalNumbers() {
           <div className="p-4 bg-white rounded shadow">
             <b>3. Rational Numbers in 3D: Fraction of a Cube</b>
             <div className="my-2">
-              <img
+              <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Cube_fraction.svg/320px-Cube_fraction.svg.png"
                 alt="Fraction of a cube"
                 className="w-40 mx-auto"

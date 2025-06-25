@@ -5,7 +5,7 @@ import useMeasure from "react-use-measure";
 import { useWindowSize } from "react-use";
 
 // Helper to get angle from 0 to 2*PI radians, sweeping counter-clockwise from startPoint to endPoint
-function getAngleFromAToB(center, startPoint, endPoint) {
+function getAngleFromAToB(center: { x: any; y: any; }, startPoint: { x: any; y: any; }, endPoint: never) {
   const angleStart = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
   const angleEnd = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
 
