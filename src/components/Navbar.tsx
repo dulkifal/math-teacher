@@ -11,6 +11,7 @@ export default function Navbar() {
         <div className="flex gap-6 items-center">
           <Link href="/" className="hover:underline">Home</Link>
           <Link href="/cube" className="hover:underline">Cube Quiz</Link>
+          <Link href="/angle" className="hover:underline">Angle</Link>
           <Link href="/resources" className="hover:underline">Resources</Link>
           <SignedOut>
             <SignInButton mode="modal">

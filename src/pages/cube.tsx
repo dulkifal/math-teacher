@@ -37,6 +37,7 @@ export default function CubeQuiz() {
       });
     }
   }, [userId]);
+  console.log("User:", user)
 
   // Shuffle large table on mount
   useEffect(() => {
@@ -78,7 +79,7 @@ export default function CubeQuiz() {
         {/* Score Display */}
         {userId && (
           <div className="text-center mb-6 text-xl font-bold">
-            {user?.username}&apos;s Score: {score}
+            {user?.fullName}&apos;s Score: {score}
           </div>
         )}
 
