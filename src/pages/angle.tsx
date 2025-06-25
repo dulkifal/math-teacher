@@ -89,10 +89,10 @@ function DraggablePoint({ position, onDrag, color }: DraggablePointProps) {
 
 
 export default function AnglePage() {
-  const [pointA, setPointA] = useState({ x: 150, y: 50 }); // Red point - acts as a reference line
-  const [pointB, setPointB] = useState({ x: 200, y: 350 }); // Blue point - initially the second point
-  const [otherPoints, setOtherPoints] = useState([]); // Array for dynamically added points
-  const [center] = useState({ x: 200, y: 200 }); // Green point
+  const [pointA, setPointA] = useState<Point>({ x: 150, y: 50 });
+  const [pointB, setPointB] = useState<Point>({ x: 200, y: 350 });
+  const [otherPoints, setOtherPoints] = useState<Point[]>([]); // <-- Fix: type as Point[]
+  const [center] = useState<Point>({ x: 200, y: 200 });
 
   const [ref] = useMeasure();
   useWindowSize();
