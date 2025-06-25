@@ -88,7 +88,6 @@ export default function AnglePage() {
   const [ref] = useMeasure();
   useWindowSize();
 
-  const { user } = useClerk(); // Retained as per original code
 
   // Optimized drag handlers for fixed points using useCallback
   const handleDragA = useCallback((newPosition) => {
@@ -118,13 +117,25 @@ export default function AnglePage() {
     });
   };
 
+  // Undo handler: removes the last added line/point
+  const handleUndo = useCallback(() => {
+    setOtherPoints(prevPoints => prevPoints.slice(0, -1));
+  }, []);
+
   return (
     <div>
       <button
         onClick={addLine}
-        className="absolute top-4 left-4 p-2 bg-blue-500 text-white rounded-md z-10"
+        className="absolute top-14 left-4 p-2 bg-blue-500 text-white rounded-md z-10"
       >
         Add Line
+      </button>
+      <button
+        onClick={handleUndo}
+        className="absolute top-14 left-28 p-2 bg-gray-500 text-white rounded-md z-10"
+        disabled={otherPoints.length === 0}
+      >
+        Undo
       </button>
       <div ref={ref} className="relative w-full h-screen bg-gray-100">
         <svg className="absolute inset-0 w-full h-full">
@@ -223,6 +234,7 @@ export default function AnglePage() {
                 />
                 <path d={arcPath} fill="none" stroke={arcColor} strokeWidth="2" />
                 <text
+              
                   x={midPoint.x}
                   y={midPoint.y}
                   textAnchor="middle"
