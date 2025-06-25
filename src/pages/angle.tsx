@@ -99,17 +99,16 @@ export default function AnglePage() {
 
 
   // Optimized drag handlers for fixed points using useCallback
-  const handleDragA = useCallback((newPosition ) => {
+  const handleDragA = useCallback((newPosition: Point) => {
     setPointA(newPosition);
   }, []);
 
-  const handleDragB = useCallback((newPosition) => {
+  const handleDragB = useCallback((newPosition: Point) => {
     setPointB(newPosition);
   }, []);
 
   // Optimized drag handler for dynamic points using useCallback
-  // This will be passed down to each DraggablePoint component
-  const handleDragOtherPoint = useCallback((index, newPosition) => {
+  const handleDragOtherPoint = useCallback((index: number, newPosition: Point) => {
     setOtherPoints(prevPoints => {
       const newPoints = [...prevPoints];
       newPoints[index] = newPosition;
