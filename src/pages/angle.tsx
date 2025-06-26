@@ -3,7 +3,10 @@ import { useDrag } from "react-use-gesture";
 import { animated } from "react-spring";
 import useMeasure from "react-use-measure";
 import { useWindowSize } from "react-use";
-
+ 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {faPlus, faRotateLeft} from '@fortawesome/free-solid-svg-icons' 
+import Angle from "@/components/Angle";
 // Type for a 2D point
 type Point = { x: number; y: number };
 
@@ -131,19 +134,21 @@ export default function AnglePage() {
   }, []);
 
   return (
-    <div>
+    <div className="relative">
+        <div  className="flex items-center justify-center relative w-full h-screen">
+        
       <button
         onClick={addLine}
-        className="absolute top-14 left-4 p-2 bg-blue-500 text-white rounded-md z-10"
+        className="absolute top-4 left-4 px-4 text-gray-500 bg-blue-50 rounded-md z-10"
       >
-        Add Line
+      <FontAwesomeIcon icon={faPlus} />
       </button>
       <button
         onClick={handleUndo}
-        className="absolute top-14 left-28 p-2 bg-gray-500 text-white rounded-md z-10"
+        className="absolute top-4 left-28 p-2 bg-blue-50 text-gray-500 rounded-md z-10"
         disabled={otherPoints.length === 0}
       >
-        Undo
+       <FontAwesomeIcon icon={faRotateLeft} />
       </button>
       <div ref={ref} className="relative w-full h-screen bg-gray-100">
         <svg className="absolute inset-0 w-full h-full">
@@ -184,7 +189,7 @@ export default function AnglePage() {
             const midPoint2 = getAngleTextMidpoint(center, pointA, pointB, 65, false);
 
             return (
-              <React.Fragment>
+              <>
                 <path d={arcPath1} fill="none" stroke="orange" strokeWidth="3" />
                 <path d={arcPath2} fill="none" stroke="purple" strokeWidth="2" strokeDasharray="6 4" />
                 <text
@@ -207,7 +212,7 @@ export default function AnglePage() {
                 >
                   {angleClockwiseDeg.toFixed(1)}°
                 </text>
-              </React.Fragment>
+              </>
             );
           })()}
 
@@ -279,6 +284,8 @@ export default function AnglePage() {
             color={`hsl(${index * 60 + 120}, 70%, 50%)`}
           />
         ))}
+      </div>
+      <Angle  />
       </div>
     </div>
   );
