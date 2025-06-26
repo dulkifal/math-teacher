@@ -125,7 +125,14 @@ export default function Angle() {
 
 
         <div ref={ref} className="flex items-center justify-center relative w-full h-screen">
-            <svg className="absolute inset-0 w-full h-full">
+            <div className=" flex items-center justify-center z-10">
+
+                <h2>Angle Visualization</h2>
+            </div>
+
+
+            <svg className="absolute inset-0 w-full h-50%" width="400" height="400">
+
                
                 
                 <defs>
@@ -223,11 +230,6 @@ export default function Angle() {
                         </>
                     );
                 })()}
-
-
-               
-
-
                 {/* Points (SVG Circles) */}
                 <circle cx={pointA.x} cy={pointA.y} r="5" fill="red" />
                 <circle cx={pointB.x} cy={pointB.y} r="5" fill="blue" />
