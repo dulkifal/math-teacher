@@ -1,95 +1,14 @@
 import React, { useState, useCallback } from "react"; // Import useCallback
-import { useDrag } from "react-use-gesture";
-import { animated } from "react-spring";
 import useMeasure from "react-use-measure";
 import { useWindowSize } from "react-use";
  
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {faPlus, faRotateLeft} from '@fortawesome/free-solid-svg-icons' 
 import Angle from "@/components/Angle";
-// Type for a 2D point
-type Point = { x: number; y: number };
-
-// Props for DraggablePoint
-interface DraggablePointProps {
-  position: Point;
-  onDrag: (pos: Point) => void;
-  color: string;
-}
-
-// Helper to get angle from 0 to 2*PI radians, sweeping counter-clockwise from startPoint to endPoint
-function getAngleFromAToB(center: Point, startPoint: Point, endPoint: Point): number {
-  const angleStart = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
-  const angleEnd = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
-
-  let angle = angleEnd - angleStart;
-  if (angle < 0) {
-    angle += 2 * Math.PI; // Ensure angle is positive (0 to 2*PI)
-  }
-  return angle; // in radians
-}
-
-function getArcPath(center: Point, startPoint: Point, endPoint: Point, radius: number, largeArcFlag: boolean, sweepFlag: boolean): string {
-  const startAngle = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
-  const endAngle = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
-
-  const x1 = center.x + radius * Math.cos(startAngle);
-  const y1 = center.y + radius * Math.sin(startAngle);
-  const x2 = center.x + radius * Math.cos(endAngle);
-  const y2 = center.y + radius * Math.sin(endAngle);
-
-  // SVG arc command: A rx ry x-axis-rotation large-arc-flag sweep-flag x y
-  return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag ? 1 : 0} ${sweepFlag ? 1 : 0} ${x2} ${y2}`;
-}
-
-// Function to get the midpoint for angle text
-function getAngleTextMidpoint(center: Point, startPoint: Point, endPoint: Point, radius: number, isCounterClockwise: boolean): Point {
-  const startAngle = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
-  const endAngle = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
-
-  let midAngle;
-
-  if (isCounterClockwise) {
-    let angleDiff = endAngle - startAngle;
-    if (angleDiff < 0) angleDiff += 2 * Math.PI;
-    midAngle = startAngle + angleDiff / 2;
-  } else { // Clockwise
-    let angleDiff = startAngle - endAngle;
-    if (angleDiff < 0) angleDiff += 2 * Math.PI;
-    midAngle = endAngle + angleDiff / 2;
-  }
-
-  return {
-    x: center.x + radius * Math.cos(midAngle),
-    y: center.y + radius * Math.sin(midAngle),
-  };
-}
-
-// NEW COMPONENT FOR DRAGGABLE POINTS
-function DraggablePoint({ position, onDrag, color }: DraggablePointProps) {
-  const bind = useDrag((state) => {
-    onDrag({ x: state.offset[0], y: state.offset[1] });
-  }, {
-    from: [position.x, position.y] // Initialize from prop for smooth drag
-  });
-
-  return (
-    <animated.div
-      {...bind()}
-      style={{
-        position: "absolute",
-        left: position.x - 5,
-        top: position.y - 5,
-        width: "10px",
-        height: "10px",
-        backgroundColor: color,
-        borderRadius: "50%",
-        cursor: "grab",
-      }}
-    />
-  );
-}
-
+import { Point } from "../types"; // Assuming Point and DraggablePointProps are defined in types.ts
+import { getAngleFromAToB, getArcPath, getAngleTextMidpoint } from "../utils"; // Import utility functions
+import {DraggablePoint} from "../components/DraggablePoint"; // Import the DraggablePoint component
+import Transversal from "@/components/Transversal";
 
 export default function AnglePage() {
   const [pointA, setPointA] = useState<Point>({ x: 150, y: 50 });
@@ -135,7 +54,8 @@ export default function AnglePage() {
 
   return (
     <div className="relative">
-        <div  className="flex items-center justify-center relative w-full h-screen">
+        <div  className="grid grid-cols-2 gap-4 items-center justify-center relative w-full h-screen">
+       
         
       <button
         onClick={addLine}
@@ -150,7 +70,7 @@ export default function AnglePage() {
       >
        <FontAwesomeIcon icon={faRotateLeft} />
       </button>
-      <div ref={ref} className="relative w-full h-screen bg-gray-100">
+      <div ref={ref} className="  ">
         <svg className="absolute inset-0 w-full h-full">
           {/* Main Lines from Points A and B */}
           <line
@@ -285,7 +205,10 @@ export default function AnglePage() {
           />
         ))}
       </div>
+   
       <Angle  />
+      <Transversal />
+      {/* <Transversal /> */}
       </div>
     </div>
   );
