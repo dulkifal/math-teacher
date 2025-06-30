@@ -79,7 +79,7 @@ export default function CubeQuiz() {
         {/* Score Display */}
         {userId && (
           <div className="text-center mb-6 text-xl font-bold">
-            {user?.fullName}&apos;s Score: {score}
+            Your Score: {score}
           </div>
         )}
 
@@ -98,9 +98,10 @@ export default function CubeQuiz() {
                         className="w-full text-left p-2 hover:bg-gray-200 rounded"
                         disabled={!userId}
                       >
-                        {row.n} → {row.cube}
+                        {row.n} ³ = {row.cube}
                       </button>
                     </td>
+                    
                   </tr>
                 ))}
               </tbody>
@@ -141,19 +142,75 @@ export default function CubeQuiz() {
             <div className="h-96 overflow-y-auto">
               <table className="w-full">
                 <tbody>
-                  {largeTable.map(row => (
-                    <tr key={row.n}>
-                      <td>
-                        <button
-                          onClick={() => handleStartQuiz(row.cube)}
-                          className="w-full text-left p-2 hover:bg-gray-200 rounded"
-                          disabled={!userId}
-                        >
-                          {row.cube}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {(() => {
+                    // Split largeTable into three columns
+                    const third = Math.ceil(largeTable.length / 3);
+                    const col1 = largeTable.slice(0, third);
+                    const col2 = largeTable.slice(third, third * 2);
+                    const col3 = largeTable.slice(third * 2);
+
+                    return (
+                      <tr>
+                        <td className="align-top w-1/2">
+                          <table className="w-full">
+                            <tbody>
+                              {col1.map(row => (
+                                <tr key={row.n}>
+                                  <td>
+                                    <button
+                                      onClick={() => handleStartQuiz(row.cube)}
+                                      className="w-full text-left p-2 hover:bg-gray-200 rounded"
+                                      disabled={!userId}
+                                    >
+                                      {row.cube}
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </td>
+                        <td className="align-top w-1/2">
+                          <table className="w-full">
+                            <tbody>
+                              {col2.map(row => (
+                                <tr key={row.n}>
+                                  <td>
+                                    <button
+                                      onClick={() => handleStartQuiz(row.cube)}
+                                      className="w-full text-left p-2 hover:bg-gray-200 rounded"
+                                      disabled={!userId}
+                                    >
+                                      {row.cube}
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </td>
+                        <td className="align-top w-1/2">
+                          <table className="w-full">
+                            <tbody>
+                              {col3.map(row => (
+                                <tr key={row.n}>
+                                  <td>
+                                    <button
+                                      onClick={() => handleStartQuiz(row.cube)}
+                                      className="w-full text-left p-2 hover:bg-gray-200 rounded"
+                                      disabled={!userId}
+                                    >
+                                      {row.cube}
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    );
+                  })()}
                 </tbody>
               </table>
             </div>

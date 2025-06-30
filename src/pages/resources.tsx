@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Navbar from "../components/Navbar";
+
 const resources = [
 	{
 		title: "Khan Academy",
@@ -32,7 +32,7 @@ const resources = [
 export default function Resources() {
 	return (
 		<div className="min-h-screen p-8">
-			<Navbar />
+			
 			<h1 className="text-2xl font-bold mb-4">Math Learning Resources</h1>
 			<ul className="list-disc list-inside">
 				{resources.map((resource, index) => (

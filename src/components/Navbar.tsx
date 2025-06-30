@@ -3,7 +3,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
   return (
-    <nav className="w-full bg-blue-700 text-white shadow ">
+    <nav className="w-full bg-blue-100 text-gray-800 shadow ">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <Link href="/" className="text-2xl font-bold tracking-tight">
           Math Teacher

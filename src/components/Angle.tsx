@@ -3,8 +3,8 @@ import React, { useState, useCallback } from "react"; // Import useCallback
 import useMeasure from "react-use-measure";
 import { useWindowSize } from "react-use";
 
-import { Point } from "../types"; 
-import { getAngleFromAToB, getArcPath, getAngleTextMidpoint,  } from "../utils"; // Import utility functions
+import { Point } from "../types";
+import { getAngleFromAToB, getArcPath, getAngleTextMidpoint, } from "../utils"; // Import utility functions
 
 import { DraggablePoint } from "../components/DraggablePoint"; // Import the DraggablePoint component
 export default function Angle() {
@@ -12,7 +12,7 @@ export default function Angle() {
     const [pointB, setPointB] = useState<Point>({ x: 200, y: 350 });
     const [otherPoints, setOtherPoints] = useState<Point[]>([]); // <-- Fix: type as Point[]
     const [center] = useState<Point>({ x: 200, y: 200 });
-  
+
     const [ref] = useMeasure();
     useWindowSize();
 
@@ -20,7 +20,7 @@ export default function Angle() {
     // Optimized drag handlers for fixed points using useCallback
     const handleDragA = useCallback((newPosition: Point) => {
         setPointA(newPosition);
-       
+
 
     }, []);
 
@@ -42,7 +42,7 @@ export default function Angle() {
     return (
 
 
-        <div ref={ref} className="flex items-center justify-center relative w-full h-screen">
+        <div ref={ref} className="border-2 border-solid border-gray-300 relative w-full h-full">
             <div className=" flex items-center justify-center z-10">
 
                 <h2>Angle Visualization</h2>
@@ -51,8 +51,8 @@ export default function Angle() {
 
             <svg className="absolute inset-0 w-full h-50%" width="400" height="400">
 
-               
-                
+
+
                 <defs>
                     <marker
                         id="arrowhead"
@@ -90,7 +90,7 @@ export default function Angle() {
                 {/* Center Point */}
                 <circle cx={center.x} cy={center.y} r="5" fill="
 #00FF00" />
-              
+
 
 
 
