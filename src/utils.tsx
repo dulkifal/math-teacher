@@ -12,17 +12,36 @@ export function getAngleFromAToB(center: Point, startPoint: Point, endPoint: Poi
     return angle; // in radians
 }
 
-export function getArcPath(center: Point, startPoint: Point, endPoint: Point, radius: number, largeArcFlag: boolean, sweepFlag: boolean): string {
-    const startAngle = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
-    const endAngle = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
+// export function getArcPath(center: Point, startPoint: Point, endPoint: Point, radius: number, largeArcFlag: boolean, sweepFlag: boolean): string {
+//     const startAngle = Math.atan2(startPoint.y - center.y, startPoint.x - center.x);
+//     const endAngle = Math.atan2(endPoint.y - center.y, endPoint.x - center.x);
 
-    const x1 = center.x + radius * Math.cos(startAngle);
-    const y1 = center.y + radius * Math.sin(startAngle);
-    const x2 = center.x + radius * Math.cos(endAngle);
-    const y2 = center.y + radius * Math.sin(endAngle);
+//     const x1 = center.x + radius * Math.cos(startAngle);
+//     const y1 = center.y + radius * Math.sin(startAngle);
+//     const x2 = center.x + radius * Math.cos(endAngle);
+//     const y2 = center.y + radius * Math.sin(endAngle);
 
-    // SVG arc command: A rx ry x-axis-rotation large-arc-flag sweep-flag x y
-    return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag ? 1 : 0} ${sweepFlag ? 1 : 0} ${x2} ${y2}`;
+//     // SVG arc command: A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+//     return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag ? 1 : 0} ${sweepFlag ? 1 : 0} ${x2} ${y2}`;
+// }
+
+export function getArcPath(
+  vertex: Point,
+  ray1: Point,
+  ray2: Point,
+  radius: number,
+  largeArcFlag: boolean,
+  sweepFlag: boolean
+): string {
+  const startAngle = Math.atan2(ray1.y - vertex.y, ray1.x - vertex.x);
+  const endAngle = Math.atan2(ray2.y - vertex.y, ray2.x - vertex.x);
+
+  const x1 = vertex.x + radius * Math.cos(startAngle);
+  const y1 = vertex.y + radius * Math.sin(startAngle);
+  const x2 = vertex.x + radius * Math.cos(endAngle);
+  const y2 = vertex.y + radius * Math.sin(endAngle);
+
+  return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArcFlag ? 1 : 0} ${sweepFlag ? 1 : 0} ${x2} ${y2}`;
 }
 
 // Function to get the midpoint for angle text
