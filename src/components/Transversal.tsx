@@ -56,10 +56,11 @@ export default function Transversal() {
         line1End: { x: 320, y: 80 },
         line2Start: { x: 80, y: 200 },
         line2End: { x: 320, y: 200 },
-        transversalStart: { x: 120, y: 40 },
-        transversalEnd: { x: 280, y: 240 }
+        transversalStart: { x: 150, y: 10 },
+        transversalEnd: { x: 300, y: 280 }
     };
 
+    // State for all points
     const [line1Start, setLine1Start] = useState<Point>(initial.line1Start);
     const [line1End, setLine1End] = useState<Point>(initial.line1End);
     const [line2Start, setLine2Start] = useState<Point>(initial.line2Start);
@@ -67,93 +68,133 @@ export default function Transversal() {
     const [transversalStart, setTransversalStart] = useState<Point>(initial.transversalStart);
     const [transversalEnd, setTransversalEnd] = useState<Point>(initial.transversalEnd);
 
+    // Reset handler
+    const handleReset = () => {
+        setLine1Start(initial.line1Start);
+        setLine1End(initial.line1End);
+        setLine2Start(initial.line2Start);
+        setLine2End(initial.line2End);
+        setTransversalStart(initial.transversalStart);
+        setTransversalEnd(initial.transversalEnd);
+    };
+
+    // SVG size
+    const svgWidth = 400;
+    const svgHeight = 300;
+
+    // Calculate offset to center SVG in the div
+    const containerStyle: React.CSSProperties = {
+        minHeight: '520px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        border: '2px solid #d1d5db',
+        background: 'white',
+        overflow: 'scroll',
+        width: '100%',
+    };
+
     return (
-        <div ref={ref} className="border-2 border-solid border-gray-300 relative w-full h-[320px] overflow-scroll">
-            <div className="absolute top-0 left-0 flex items-center justify-center z-10 w-full">
-                <h2>Transversal Lines and Angles Visualization</h2>
+        <div ref={ref} style={containerStyle}>
+            <div className="flex items-center justify-between w-full mb-2 px-4">
+                <h2 className="text-center flex-1">Transversal Lines and Angles Visualization</h2>
+                <button
+                    onClick={handleReset}
+                    className="ml-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 border border-gray-400"
+                >
+                    Reset
+                </button>
             </div>
-            <svg className="absolute top-0 left-0" width={800} height={500}>
-                {/* Parallel Lines */}
-                <line x1={line1Start.x} y1={line1Start.y} x2={line1End.x} y2={line1End.y} stroke="blue" strokeWidth="2" />
-                <line x1={line2Start.x} y1={line2Start.y} x2={line2End.x} y2={line2End.y} stroke="blue" strokeWidth="2" />
-                {/* Transversal Line */}
-                <line x1={transversalStart.x} y1={transversalStart.y} x2={transversalEnd.x} y2={transversalEnd.y} stroke="red" strokeWidth="2" />
+            <div style={{ position: 'relative', width: svgWidth, height: svgHeight }}>
+                <svg
+                    width={svgWidth}
+                    height={svgHeight}
+                    style={{ display: 'block', margin: '0 auto', background: 'white', position: 'absolute', top: 0, left: 0 }}
+                >
+                    {/* Parallel Lines */}
+                    <line x1={line1Start.x} y1={line1Start.y} x2={line1End.x} y2={line1End.y} stroke="blue" strokeWidth="2" />
+                    <line x1={line2Start.x} y1={line2Start.y} x2={line2End.x} y2={line2End.y} stroke="blue" strokeWidth="2" />
+                    {/* Transversal Line */}
+                    <line x1={transversalStart.x} y1={transversalStart.y} x2={transversalEnd.x} y2={transversalEnd.y} stroke="red" strokeWidth="2" />
 
-                {/* Calculate and display all 8 angles (4 at each intersection) */}
-                {(() => {
-                    function getAngleRad(A: Point, B: Point, C: Point) {
-                        const ab = Math.atan2(A.y - B.y, A.x - B.x);
-                        const cb = Math.atan2(C.y - B.y, C.x - B.x);
-                        let diff = cb - ab;
-                        if (diff < 0) diff += 2 * Math.PI;
-                        if (diff > Math.PI) diff = 2 * Math.PI - diff; // always the smaller angle
-                        return diff;
-                    }
-                    function getIntersection(p1: Point, p2: Point, p3: Point, p4: Point): Point | null {
-                        const a1 = p2.y - p1.y;
-                        const b1 = p1.x - p2.x;
-                        const c1 = a1 * p1.x + b1 * p1.y;
-                        const a2 = p4.y - p3.y;
-                        const b2 = p3.x - p4.x;
-                        const c2 = a2 * p3.x + b2 * p3.y;
-                        const det = a1 * b2 - a2 * b1;
-                        if (det === 0) return null;
-                        const x = (b2 * c1 - b1 * c2) / det;
-                        const y = (a1 * c2 - a2 * c1) / det;
-                        return { x, y };
-                    }
-                    const P = getIntersection(line1Start, line1End, transversalStart, transversalEnd);
-                    const Q = getIntersection(line2Start, line2End, transversalStart, transversalEnd);
-                    if (!P || !Q) return null;
+                    {/* Calculate and display all 8 angles (4 at each intersection) */}
+                    {(() => {
+                        function getAngleRad(A: Point, B: Point, C: Point) {
+                            const ab = Math.atan2(A.y - B.y, A.x - B.x);
+                            const cb = Math.atan2(C.y - B.y, C.x - B.x);
+                            let diff = cb - ab;
+                            if (diff < 0) diff += 2 * Math.PI;
+                            if (diff > Math.PI) diff = 2 * Math.PI - diff; // always the smaller angle
+                            return diff;
+                        }
+                        function getIntersection(p1: Point, p2: Point, p3: Point, p4: Point): Point | null {
+                            const a1 = p2.y - p1.y;
+                            const b1 = p1.x - p2.x;
+                            const c1 = a1 * p1.x + b1 * p1.y;
+                            const a2 = p4.y - p3.y;
+                            const b2 = p3.x - p4.x;
+                            const c2 = a2 * p3.x + b2 * p3.y;
+                            const det = a1 * b2 - a2 * b1;
+                            if (det === 0) return null;
+                            const x = (b2 * c1 - b1 * c2) / det;
+                            const y = (a1 * c2 - a2 * c1) / det;
+                            return { x, y };
+                        }
+                        const P = getIntersection(line1Start, line1End, transversalStart, transversalEnd);
+                        const Q = getIntersection(line2Start, line2End, transversalStart, transversalEnd);
+                        if (!P || !Q) return null;
 
-                    // Each intersection: four angles (show arc and label for each)
-                    const angleData = [
-                        // At P (top)
-                        { A: transversalStart, B: P, C: line1Start, color: "orange" },
-                        { A: line1End, B: P, C: transversalStart, color: "orange" },
-                        { A: transversalEnd, B: P, C: line1End, color: "orange" },
-                        { A: line1Start, B: P, C: transversalEnd, color: "orange" },
-                        // At Q (bottom)
-                        { A: transversalStart, B: Q, C: line2Start, color: "purple" },
-                        { A: line2End, B: Q, C: transversalStart, color: "purple" },
-                        { A: transversalEnd, B: Q, C: line2End, color: "purple" },
-                        { A: line2Start, B: Q, C: transversalEnd, color: "purple" },
-                    ];
+                        // Each intersection: four angles (show arc and label for each)
+                        const angleData = [
+                            // At P (top)
+                            { A: transversalStart, B: P, C: line1Start, color: "orange" },
+                            { A: line1End, B: P, C: transversalStart, color: "orange" },
+                            { A: transversalEnd, B: P, C: line1End, color: "orange" },
+                            { A: line1Start, B: P, C: transversalEnd, color: "orange" },
+                            // At Q (bottom)
+                            { A: transversalStart, B: Q, C: line2Start, color: "purple" },
+                            { A: line2End, B: Q, C: transversalStart, color: "purple" },
+                            { A: transversalEnd, B: Q, C: line2End, color: "purple" },
+                            { A: line2Start, B: Q, C: transversalEnd, color: "purple" },
+                        ];
 
-                    return angleData.map(({ A, B, C, color }, idx) => {
-                        const angleRad = getAngleRad(A, B, C);
-                        const angleDeg = (angleRad * 180) / Math.PI;
-                        const arcRadius = 32;
-                        const arcPath = getArcPath(B, A, C, arcRadius, angleRad > Math.PI, true);
-                        const mid = getAngleTextMidpoint(B, A, C, arcRadius + 14);
+                        return angleData.map(({ A, B, C, color }, idx) => {
+                            const angleRad = getAngleRad(A, B, C);
+                            const angleDeg = (angleRad * 180) / Math.PI;
+                            const arcRadius = 32;
+                            const arcPath = getArcPath(B, A, C, arcRadius, angleRad > Math.PI, true);
+                            const mid = getAngleTextMidpoint(B, A, C, arcRadius + 14);
 
-                        return (
-                            <g key={idx}>
-                                <path d={arcPath} fill="none" stroke={color} strokeWidth="2" />
-                                <text
-                                    x={mid.x}
-                                    y={mid.y}
-                                    fontSize="15"
-                                    fill={color}
-                                    textAnchor="middle"
-                                    fontWeight="bold"
-                                    alignmentBaseline="middle"
-                                >
-                                    {angleDeg.toFixed(1)}°
-                                </text>
-                            </g>
-                        );
-                    });
-                })()}
-            </svg>
-            {/* Draggable Points for Parallel Lines */}
-            <DraggablePoint point={line1Start} onDrag={setLine1Start} />
-            <DraggablePoint point={line1End} onDrag={setLine1End} />
-            <DraggablePoint point={line2Start} onDrag={setLine2Start} />
-            <DraggablePoint point={line2End} onDrag={setLine2End} />
-            {/* Draggable Points for Transversal Line */}
-            <DraggablePoint point={transversalStart} onDrag={setTransversalStart} />
-            <DraggablePoint point={transversalEnd} onDrag={setTransversalEnd} />
+                            return (
+                                <g key={idx}>
+                                    <path d={arcPath} fill="none" stroke={color} strokeWidth="2" />
+                                    <text
+                                        x={mid.x}
+                                        y={mid.y}
+                                        fontSize="15"
+                                        fill={color}
+                                        textAnchor="middle"
+                                        fontWeight="bold"
+                                        alignmentBaseline="middle"
+                                    >
+                                        {angleDeg.toFixed(1)}°
+                                    </text>
+                                </g>
+                            );
+                        });
+                    })()}
+                </svg>
+                {/* Draggable Points for Parallel Lines */}
+                <DraggablePoint point={line1Start} onDrag={setLine1Start} />
+                <DraggablePoint point={line1End} onDrag={setLine1End} />
+                <DraggablePoint point={line2Start} onDrag={setLine2Start} />
+                <DraggablePoint point={line2End} onDrag={setLine2End} />
+                {/* Draggable Points for Transversal Line */}
+                <DraggablePoint point={transversalStart} onDrag={setTransversalStart} />
+                <DraggablePoint point={transversalEnd} onDrag={setTransversalEnd} />
+            </div>
         </div>
     );
 }
