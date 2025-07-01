@@ -136,7 +136,7 @@ export default function Angle() {
 
                             <text
                                 x={midPoint1.x}
-                                y={midPoint1.y}
+                                 y={midPoint1.y}
                                 textAnchor="middle"
                                 fontSize="20"
                                 fill="orange"

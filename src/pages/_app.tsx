@@ -17,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="A platform for math teachers to create and share interactive math problems." />
         <meta name="keywords" content="math, teacher, interactive, problems, education" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-site-verification" content="PBgQzTn9-6B7VhQw45VQsm3qgNB_shNhFwi4w0aqQbg" />
         <link rel="icon" href="/one.ico" />
       </Head>
       <ClerkProvider>
