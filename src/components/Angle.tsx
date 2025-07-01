@@ -142,7 +142,19 @@ export default function Angle() {
                                 fill="orange"
                                 fontWeight="bold"
                             >
-                                {angleCounterClockwiseDeg.toFixed(1)}° {angleCounterClockwiseDeg < 90 ? "Acute Angle" : angleCounterClockwiseDeg === 90 ? "Right Angle" : angleCounterClockwiseDeg < 180 ? "Obtuse Angle" : angleCounterClockwiseDeg === 180 ? "Straight Angle" : angleCounterClockwiseDeg < 360 ? "Reflex Angle" : "Full Rotation"}
+                                {angleCounterClockwiseDeg.toFixed(1)}° {
+                                    angleCounterClockwiseDeg.toFixed(1) === "90.0"
+                                        ? "Right Angle"
+                                        : angleCounterClockwiseDeg < 90
+                                            ? "Acute Angle"
+                                            : angleCounterClockwiseDeg < 180
+                                                ? "Obtuse Angle"
+                                                : angleCounterClockwiseDeg.toFixed(1) === "180.0"
+                                                    ? "Straight Angle"
+                                                    : angleCounterClockwiseDeg < 360
+                                                        ? "Reflex Angle"
+                                                        : "Full Rotation"
+                                }
                             </text>
 
                         </>
