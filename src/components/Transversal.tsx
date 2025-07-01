@@ -68,6 +68,30 @@ export default function Transversal() {
     const [transversalStart, setTransversalStart] = useState<Point>(initial.transversalStart);
     const [transversalEnd, setTransversalEnd] = useState<Point>(initial.transversalEnd);
 
+    // Highlight state for corresponding/alternate angles
+    const [highlightIdx, setHighlightIdx] = useState<number | null>(null);
+    const [highlightType, setHighlightType] = useState<'corresponding' | 'alternateInterior' | 'alternateExterior' | 'sameSideInterior' | null>(null);
+
+    // Angle pairs
+    const correspondingPairs = [
+        [0, 4], // angle 1 and 5
+        [1, 5], // angle 2 and 6
+        [2, 6], // angle 3 and 7
+        [3, 7], // angle 4 and 8
+    ];
+    const alternateInteriorPairs = [
+        [2, 4], // angle 2 and 7
+        [3, 5], // angle 3 and 6
+    ];
+    const alternateExteriorPairs = [
+        [0, 6], // angle 1 and 2
+        [1, 7], // angle 3 and 4
+    ];
+    const sameSideInteriorPairs = [
+        [2, 5], // angle 2 and 6
+        [3, 4], // angle 3 and 7
+    ];
+
     // Reset handler
     const handleReset = () => {
         setLine1Start(initial.line1Start);
@@ -76,6 +100,50 @@ export default function Transversal() {
         setLine2End(initial.line2End);
         setTransversalStart(initial.transversalStart);
         setTransversalEnd(initial.transversalEnd);
+    };
+
+    // Handler for "Corresponding" button
+    const handleCorresponding = async () => {
+        setHighlightType('corresponding');
+        for (let i = 0; i < correspondingPairs.length; i++) {
+            setHighlightIdx(i);
+            await new Promise(res => setTimeout(res, 3000));
+        }
+        setHighlightIdx(null);
+        setHighlightType(null);
+    };
+
+    // Handler for "Alternate Interior" button
+    const handleAlternateInterior = async () => {
+        setHighlightType('alternateInterior');
+        for (let i = 0; i < alternateInteriorPairs.length; i++) {
+            setHighlightIdx(i);
+            await new Promise(res => setTimeout(res, 3000));
+        }
+        setHighlightIdx(null);
+        setHighlightType(null);
+    };
+
+    // Handler for "Alternate Exterior" button
+    const handleAlternateExterior = async () => {
+        setHighlightType('alternateExterior');
+        for (let i = 0; i < alternateExteriorPairs.length; i++) {
+            setHighlightIdx(i);
+            await new Promise(res => setTimeout(res, 3000));
+        }
+        setHighlightIdx(null);
+        setHighlightType(null);
+    };
+
+    // Handler for "Same Side Interior" button
+    const handleSameSideInterior = async () => {
+        setHighlightType('sameSideInterior');
+        for (let i = 0; i < sameSideInteriorPairs.length; i++) {
+            setHighlightIdx(i);
+            await new Promise(res => setTimeout(res, 3000));
+        }
+        setHighlightIdx(null);
+        setHighlightType(null);
     };
 
     // SVG size
@@ -100,11 +168,38 @@ export default function Transversal() {
         <div ref={ref} style={containerStyle}>
             <div className="flex items-center justify-between w-full mb-2 px-4">
                 <h2 className="text-center flex-1">Transversal Lines and Angles Visualization</h2>
-                <button
+              </div>
+            <div className="flex items-center justify-center mb-4">
+               
+               <button
                     onClick={handleReset}
                     className="ml-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 border border-gray-400"
                 >
                     Reset
+                </button>
+                <button
+                    onClick={handleCorresponding}
+                    className="ml-4 px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300 border border-yellow-400"
+                >
+                    Corresponding
+                </button>
+                <button
+                    onClick={handleAlternateInterior}
+                    className="ml-4 px-4 py-2 bg-green-200 rounded hover:bg-green-300 border border-green-400"
+                >
+                    Alternate Interior
+                </button>
+                <button
+                    onClick={handleAlternateExterior}
+                    className="ml-4 px-4 py-2 bg-purple-200 rounded hover:bg-purple-300 border border-purple-400"
+                >
+                    Alternate Exterior
+                </button>
+                <button
+                    onClick={handleSameSideInterior}
+                    className="ml-4 px-4 py-2 bg-blue-200 rounded hover:bg-blue-300 border border-blue-400"
+                >
+                    Same Side Interior
                 </button>
             </div>
             <div style={{ position: 'relative', width: svgWidth, height: svgHeight }}>
@@ -167,17 +262,43 @@ export default function Transversal() {
                             const arcPath = getArcPath(B, A, C, arcRadius, angleRad > Math.PI, true);
                             const mid = getAngleTextMidpoint(B, A, C, arcRadius + 14);
 
+                            // Highlight logic
+                            let highlight = false;
+                            if (highlightIdx !== null && highlightType === 'corresponding') {
+                                const [i1, i2] = correspondingPairs[highlightIdx];
+                                highlight = idx === i1 || idx === i2;
+                            }
+                            if (highlightIdx !== null && highlightType === 'alternateInterior') {
+                                const [i1, i2] = alternateInteriorPairs[highlightIdx];
+                                highlight = idx === i1 || idx === i2;
+                            }
+                            if (highlightIdx !== null && highlightType === 'alternateExterior') {
+                                const [i1, i2] = alternateExteriorPairs[highlightIdx];
+                                highlight = idx === i1 || idx === i2;
+                            }
+                            if (highlightIdx !== null && highlightType === 'sameSideInterior') {
+                                const [i1, i2] = sameSideInteriorPairs[highlightIdx];
+                                highlight = idx === i1 || idx === i2;
+                            }
+
                             return (
                                 <g key={idx}>
-                                    <path d={arcPath} fill="none" stroke={color} strokeWidth="2" />
+                                    <path
+                                        d={arcPath}
+                                        fill="none"
+                                        stroke={highlight ? "#00C853" : color}
+                                        strokeWidth={highlight ? 5 : 2}
+                                        opacity={highlight ? 1 : 0.8}
+                                    />
                                     <text
                                         x={mid.x}
                                         y={mid.y}
                                         fontSize="15"
-                                        fill={color}
+                                        fill={highlight ? "#00C853" : color}
                                         textAnchor="middle"
-                                        fontWeight="bold"
+                                        fontWeight={highlight ? "bolder" : "bold"}
                                         alignmentBaseline="middle"
+                                        style={highlight ? { filter: "drop-shadow(0 0 4px #00C853)" } : {}}
                                     >
                                         {angleDeg.toFixed(1)}°
                                     </text>
