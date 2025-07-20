@@ -19,7 +19,7 @@ function MyApp() {
           <li>Exterior Angles: An exterior angle of a triangle is formed by one side of the triangle and the extension of the adjacent side.</li>
           <li>Interior Angles: The angles inside a triangle, which always sum to 180 degrees.</li>
           <li>Angle Sum: The sum of the interior angles of a triangle is always 180 degrees.</li>
-          <li>Angle Bisectors: An angle bisector of a triangle is a line segment that bisects one of the triangle's angles, dividing it into two equal angles.</li>
+          <li>Angle Bisectors: An angle bisector of a triangle is a line segment that bisects one of the triangle&apos;s angles, dividing it into two equal angles.</li>
           <li>Pythagorean Theorem: In a right triangle, the square of the length of the hypotenuse is equal to the sum of the squares of the lengths of the other two sides (a² + b² = c²).</li>
           <li>Area: The area of a triangle can be calculated using the formula A = 1/2 * base * height.</li>
           <li>Perimeter: The perimeter of a triangle is the sum of the lengths of its three sides.</li>
