@@ -12,7 +12,10 @@ export default function Navbar() {
           <Link href="/" className="hover:underline">Home</Link>
           <Link href="/cube" className="hover:underline">Cube </Link>
           <Link href="/angle" className="hover:underline">Angle</Link>
+          <Link href="/addition" className="hover:underline">Addition</Link>
           <Link href="/resources" className="hover:underline">Resources</Link>
+       
+          <Link href="/triangle" className="hover:underline">Triangle</Link>
           <SignedOut>
             <SignInButton mode="modal">
               <button className="ml-4 bg-white text-blue-700 px-3 py-1 rounded hover:bg-blue-100 transition">

@@ -27,6 +27,22 @@ const resources = [
 		link: "http://tutorial.math.lamar.edu/",
 		description: "Comprehensive math notes and tutorials for various topics.",
 	},
+	// https://www.symbolab.com/geometry-calculator#
+	{
+		title: "Symbolab Geometry Calculator",
+		link: "https://www.symbolab.com/geometry-calculator",
+		description: "Online calculator for geometry problems and visualizations.",
+	},
+	{
+		title: "Wolfram Alpha",
+		link: "https://www.wolframalpha.com/",
+		description: "Computational knowledge engine for math and science queries.",
+	},
+	{
+		title: "Desmos Graphing Calculator",
+		link: "https://www.desmos.com/calculator",
+		description: "Powerful online graphing calculator for visualizing functions.",
+	},
 ];
 
 export default function Resources() {
