@@ -2,12 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 // Define a scaling factor for converting pixels to 'cm' for display purposes
 const PIXELS_PER_CM = 10; // 10 pixels = 1 cm
+const SVG_VIEWBOX_SIZE = 200; // Consistent viewBox size for all SVGs
 
 // Define types for point coordinates
 interface Point {
   x: number;
   y: number;
 }
+
+// Define type for vertex keys
+type VertexKey = 'A' | 'B' | 'C';
 
 // Helper function to calculate distance between two points (for side lengths)
 const calculateDistance = (p1: Point, p2: Point): number => {
@@ -33,69 +37,130 @@ const calculateAngle = (a: number, b: number, c: number): number => {
   return (Math.acos(clampedCosC) * 180) / Math.PI; // Convert radians to degrees
 };
 
-// Define type for vertex keys
-type VertexKey = 'A' | 'B' | 'C';
+// Helper function to calculate the foot of the altitude from a vertex to the opposite side
+const calculateAltitudeFoot = (vertex: Point, p1: Point, p2: Point): Point => {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  const lenSq = dx * dx + dy * dy;
 
-const App = () => {
-  // State for the coordinates of the three vertices (A, B, C)
-  const [vertices, setVertices] = useState<{ A: Point; B: Point; C: Point }>({
-    A: { x: 100, y: 50 },
-    B: { x: 50, y: 150 },
-    C: { x: 150, y: 150 },
-  });
+  if (lenSq === 0) return p1; // p1 and p2 are the same point
 
-  // State to track which vertex is currently being dragged
+  const t = ((vertex.x - p1.x) * dx + (vertex.y - p1.y) * dy) / lenSq;
+
+  // The foot of the perpendicular
+  return {
+    x: p1.x + t * dx,
+    y: p1.y + t * dy,
+  };
+};
+
+// Helper function to calculate a point on the angle bisector
+const calculateAngleBisectorPoint = (v1: Point, v2: Point, v3: Point, length: number = 50): Point => {
+  // Vector from v2 to v1
+  const vec1x = v1.x - v2.x;
+  const vec1y = v1.y - v2.y;
+  const len1 = Math.sqrt(vec1x * vec1x + vec1y * vec1y);
+  const unitVec1x = vec1x / len1;
+  const unitVec1y = vec1y / len1;
+
+  // Vector from v2 to v3
+  const vec2x = v3.x - v2.x;
+  const vec2y = v3.y - v2.y;
+  const len2 = Math.sqrt(vec2x * vec2x + vec2y * vec2y);
+  const unitVec2x = vec2x / len2;
+  const unitVec2y = vec2y / len2;
+
+  // Sum of unit vectors gives direction of bisector
+  const bisectorVecX = unitVec1x + unitVec2x;
+  const bisectorVecY = unitVec1y + unitVec2y;
+  const bisectorLen = Math.sqrt(bisectorVecX * bisectorVecX + bisectorVecY * bisectorVecY);
+
+  if (bisectorLen === 0) return v2; // Should not happen for a valid triangle
+
+  // Normalize and scale to desired length
+  const bisectorUnitX = bisectorVecX / bisectorLen;
+  const bisectorUnitY = bisectorVecY / bisectorLen;
+
+  return {
+    x: v2.x + bisectorUnitX * length,
+    y: v2.y + bisectorUnitY * length,
+  };
+};
+
+
+// Generic Triangle Visualization Component
+interface TriangleProps {
+  initialVertices: { A: Point; B: Point; C: Point };
+  title: string;
+  description: string;
+  showMedians?: boolean;
+  showAltitudes?: boolean;
+  showCentroid?: boolean;
+  showExteriorAngles?: boolean;
+  showInteriorAngles?: boolean;
+  showAngleBisectors?: boolean;
+  showPythagoreanTheorem?: boolean; // For a dedicated right triangle example
+  showAreaPerimeter?: boolean;
+}
+
+const TriangleVisualizer: React.FC<TriangleProps> = ({
+  initialVertices,
+  title,
+  description,
+  showMedians = false,
+  showAltitudes = false,
+  showCentroid = false,
+  showExteriorAngles = false,
+  showInteriorAngles = true, // Always show interior angles by default
+  showAngleBisectors = false,
+  showPythagoreanTheorem = false,
+  showAreaPerimeter = false,
+}) => {
+  const [vertices, setVertices] = useState(initialVertices);
   const [draggingVertex, setDraggingVertex] = useState<VertexKey | null>(null);
+  const [selectedVertex, setSelectedVertex] = useState<VertexKey>('A');
 
-  // State to track the last vertex that was dragged/selected for arrow movements
-  const [selectedVertex, setSelectedVertex] = useState<VertexKey>('A'); // Default to A
-
-  // State for side lengths and angles
   const [triangleData, setTriangleData] = useState({
     ab: 0, bc: 0, ca: 0,
     angleA: 0, angleB: 0, angleC: 0,
+    area: 0, perimeter: 0,
   });
 
-  // Calculate triangle data whenever vertices change
   useEffect(() => {
     const { A, B, C } = vertices;
 
-    // Calculate side lengths
     const ab = calculateDistance(A, B);
     const bc = calculateDistance(B, C);
     const ca = calculateDistance(C, A);
 
-    // Calculate angles using Law of Cosines
-    const angleA = calculateAngle(ca, ab, bc); // Angle at A, opposite side BC
-    const angleB = calculateAngle(ab, bc, ca); // Angle at B, opposite side CA
-    const angleC = calculateAngle(bc, ca, ab); // Angle at C, opposite side AB
+    const angleA = calculateAngle(ca, ab, bc);
+    const angleB = calculateAngle(ab, bc, ca);
+    const angleC = calculateAngle(bc, ca, ab);
 
-    setTriangleData({ ab, bc, ca, angleA, angleB, angleC });
+    // Calculate Area (Heron's formula)
+    const s = (ab + bc + ca) / 2; // semi-perimeter
+    const area = Math.sqrt(s * (s - ab) * (s - bc) * (s - ca));
+    const perimeter = ab + bc + ca;
+
+    setTriangleData({ ab, bc, ca, angleA, angleB, angleC, area, perimeter });
   }, [vertices]);
 
-  // Event handler for when a mouse button is pressed down on a vertex
   const handleMouseDown = useCallback((vertexKey: VertexKey) => () => {
     setDraggingVertex(vertexKey);
-    setSelectedVertex(vertexKey); // Set this vertex as the selected one for arrow controls
+    setSelectedVertex(vertexKey);
   }, []);
 
-  // Event handler for when the mouse moves (while a vertex is being dragged)
   const handleMouseMove = useCallback((e: React.MouseEvent<SVGSVGElement>) => {
     if (draggingVertex) {
-      // Get the SVG element to calculate coordinates relative to it
       const svg = e.currentTarget;
       const svgRect = svg.getBoundingClientRect();
 
-      // Calculate new coordinates relative to the SVG's top-left corner
       let newX = e.clientX - svgRect.left;
       let newY = e.clientY - svgRect.top;
 
-      // Clamp coordinates within the SVG viewBox (0 to 200 for both x and y)
-      // The viewBox is 0 0 200 200, so we constrain to this range.
-      newX = Math.max(0, Math.min(200, newX));
-      newY = Math.max(0, Math.min(200, newY));
+      newX = Math.max(0, Math.min(SVG_VIEWBOX_SIZE, newX));
+      newY = Math.max(0, Math.min(SVG_VIEWBOX_SIZE, newY));
 
-      // Update the state of the dragged vertex
       setVertices((prevVertices) => ({
         ...prevVertices,
         [draggingVertex]: { x: newX, y: newY },
@@ -103,12 +168,10 @@ const App = () => {
     }
   }, [draggingVertex]);
 
-  // Event handler for when the mouse button is released
   const handleMouseUp = useCallback(() => {
-    setDraggingVertex(null); // Stop dragging
+    setDraggingVertex(null);
   }, []);
 
-  // Function to move the selected vertex by a delta
   const moveSelectedVertex = useCallback((dx: number, dy: number) => {
     if (selectedVertex) {
       setVertices((prevVertices) => {
@@ -116,9 +179,8 @@ const App = () => {
         let newX = currentPos.x + dx;
         let newY = currentPos.y + dy;
 
-        // Clamp coordinates within the SVG viewBox (0 to 200)
-        newX = Math.max(0, Math.min(200, newX));
-        newY = Math.max(0, Math.min(200, newY));
+        newX = Math.max(0, Math.min(SVG_VIEWBOX_SIZE, newX));
+        newY = Math.max(0, Math.min(SVG_VIEWBOX_SIZE, newY));
 
         return {
           ...prevVertices,
@@ -128,211 +190,330 @@ const App = () => {
     }
   }, [selectedVertex]);
 
-  // Calculate midpoints dynamically
+  // Calculations for specific properties
   const midpointAB = calculateMidpoint(vertices.A, vertices.B);
   const midpointBC = calculateMidpoint(vertices.B, vertices.C);
   const midpointCA = calculateMidpoint(vertices.C, vertices.A);
 
+  const centroid = showCentroid ? {
+    x: (vertices.A.x + vertices.B.x + vertices.C.x) / 3,
+    y: (vertices.A.y + vertices.B.y + vertices.C.y) / 3,
+  } : null;
+
+  const altitudeFootA = calculateAltitudeFoot(vertices.A, vertices.B, vertices.C);
+  const altitudeFootB = calculateAltitudeFoot(vertices.B, vertices.C, vertices.A);
+  const altitudeFootC = calculateAltitudeFoot(vertices.C, vertices.A, vertices.B);
+
+  const bisectorPointA = calculateAngleBisectorPoint(vertices.C, vertices.A, vertices.B);
+  const bisectorPointB = calculateAngleBisectorPoint(vertices.A, vertices.B, vertices.C);
+  const bisectorPointC = calculateAngleBisectorPoint(vertices.B, vertices.C, vertices.A);
+
+  // Check for right triangle for Pythagorean theorem
+  const isRightTriangle =
+    Math.abs(triangleData.angleA - 90) < 0.1 ||
+    Math.abs(triangleData.angleB - 90) < 0.1 ||
+    Math.abs(triangleData.angleC - 90) < 0.1;
+
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-inter"
-    >
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Triangle Medians</h1>
-      <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-200 w-full max-w-lg">
-        <p className="text-gray-700 mb-4 text-center">
-          A median of a triangle is a line segment joining a vertex to the midpoint of the opposite side.
-          Drag the red, blue, and green vertices to reshape the triangle.
-          Use the arrow buttons to precisely move the <span className="font-semibold text-blue-600">{selectedVertex}</span> vertex.
-        </p>
+    <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center w-full">
+      <h2 className="text-xl font-semibold mb-2 text-gray-800">{title}</h2>
+      <p className="text-gray-600 text-sm mb-4 text-center">{description}</p>
 
-        <svg
-          width="100%"
-          height="300"
-          viewBox="0 0 200 200" // Maintain a consistent coordinate system
-          className="bg-white border border-gray-300 rounded-lg shadow-inner"
-          onMouseMove={handleMouseMove} // Mouse move listener on the SVG
-          onMouseUp={handleMouseUp}     // Mouse up listener on the SVG
-          onMouseLeave={handleMouseUp} // Stop dragging if mouse leaves the SVG area
+      <svg
+        width="100%"
+        height="250"
+        viewBox={`0 0 ${SVG_VIEWBOX_SIZE} ${SVG_VIEWBOX_SIZE}`}
+        className="bg-white border border-gray-300 rounded-lg shadow-inner mb-4"
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
+        {/* Reset Button */}
+        <g
+          className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
+          onClick={() => {
+            setVertices(initialVertices);
+            setSelectedVertex('A');
+          }}
         >
-          {/* Reset Button */}
-          <g
-            className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
-            onClick={() => {
-              setVertices({
-                A: { x: 100, y: 50 },
-                B: { x: 50, y: 150 },
-                C: { x: 150, y: 150 },
-              });
-              setSelectedVertex('A'); // Reset selected vertex too
-            }}
-          >
-            <rect x="10" y="10" width="35" height="15" fill="#e0e0e0" rx="4" ry="4" />
-            <text x="27.5" y="20" fontSize="8" textAnchor="middle" fill="black" fontWeight="bold">Reset</text>
-          </g>
+          <rect x="5" y="5" width="30" height="12" fill="#e0e0e0" rx="3" ry="3" />
+          <text x="20" y="13" fontSize="6" textAnchor="middle" fill="black" fontWeight="bold">Reset</text>
+        </g>
 
-          {/* Directional Arrow Controls */}
-          {/* Group for arrows to easily position them */}
-          <g transform="translate(160, 20)"> {/* Position the arrow group */}
-            <rect x="-25" y="-25" width="50" height="50" fill="#f0f0f0" rx="8" ry="8" stroke="#ccc" strokeWidth="1" /> {/* Background for arrows */}
-
-            {/* Up Arrow */}
-            <path d="M0 -15 L-5 -5 L5 -5 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800"
-              onClick={() => moveSelectedVertex(0, -5)} />
-            {/* Down Arrow */}
-            <path d="M0 15 L-5 5 L5 5 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800"
-              onClick={() => moveSelectedVertex(0, 5)} />
-            {/* Left Arrow */}
-            <path d="M-15 0 L-5 -5 L-5 5 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800"
-              onClick={() => moveSelectedVertex(-5, 0)} />
-            {/* Right Arrow */}
-            <path d="M15 0 L5 -5 L5 5 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800"
-              onClick={() => moveSelectedVertex(5, 0)} />
-          </g>
+        {/* Directional Arrow Controls */}
+        <g transform={`translate(${SVG_VIEWBOX_SIZE - 25}, 20)`}>
+          <rect x="-20" y="-20" width="40" height="40" fill="#f0f0f0" rx="6" ry="6" stroke="#ccc" strokeWidth="1" />
+          <path d="M0 -10 L-4 -2 L4 -2 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800" onClick={() => moveSelectedVertex(0, -3)} />
+          <path d="M0 10 L-4 2 L4 2 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800" onClick={() => moveSelectedVertex(0, 3)} />
+          <path d="M-10 0 L-2 -4 L-2 4 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800" onClick={() => moveSelectedVertex(-3, 0)} />
+          <path d="M10 0 L2 -4 L2 4 Z" fill="black" className="cursor-pointer hover:fill-gray-600 active:fill-gray-800" onClick={() => moveSelectedVertex(3, 0)} />
+        </g>
 
 
-          {/* Triangle Sides */}
-          <line x1={vertices.A.x} y1={vertices.A.y} x2={vertices.B.x} y2={vertices.B.y} stroke="black" strokeWidth="2" />
-          <line x1={vertices.B.x} y1={vertices.B.y} x2={vertices.C.x} y2={vertices.C.y} stroke="black" strokeWidth="2" />
-          <line x1={vertices.C.x} y1={vertices.C.y} x2={vertices.A.x} y2={vertices.A.y} stroke="black" strokeWidth="2" />
+        {/* Triangle Sides */}
+        <line x1={vertices.A.x} y1={vertices.A.y} x2={vertices.B.x} y2={vertices.B.y} stroke="black" strokeWidth="2" />
+        <line x1={vertices.B.x} y1={vertices.B.y} x2={vertices.C.x} y2={vertices.C.y} stroke="black" strokeWidth="2" />
+        <line x1={vertices.C.x} y1={vertices.C.y} x2={vertices.A.x} y2={vertices.A.y} stroke="black" strokeWidth="2" />
 
-          {/* Medians */}
-          {/* Median from A to midpoint of BC */}
-          <line x1={vertices.A.x} y1={vertices.A.y} x2={midpointBC.x} y2={midpointBC.y} stroke="purple" strokeWidth="1" strokeDasharray="4 2" />
-          {/* Median from B to midpoint of CA */}
-          <line x1={vertices.B.x} y1={vertices.B.y} x2={midpointCA.x} y2={midpointCA.y} stroke="orange" strokeWidth="1" strokeDasharray="4 2" />
-          {/* Median from C to midpoint of AB */}
-          <line x1={vertices.C.x} y1={vertices.C.y} x2={midpointAB.x} y2={midpointAB.y} stroke="teal" strokeWidth="1" strokeDasharray="4 2" />
+        {/* Medians */}
+        {showMedians && (
+          <>
+            <line x1={vertices.A.x} y1={vertices.A.y} x2={midpointBC.x} y2={midpointBC.y} stroke="purple" strokeWidth="1" strokeDasharray="4 2" />
+            <line x1={vertices.B.x} y1={vertices.B.y} x2={midpointCA.x} y2={midpointCA.y} stroke="orange" strokeWidth="1" strokeDasharray="4 2" />
+            <line x1={vertices.C.x} y1={vertices.C.y} x2={midpointAB.x} y2={midpointAB.y} stroke="teal" strokeWidth="1" strokeDasharray="4 2" />
+            <circle cx={midpointAB.x} cy={midpointAB.y} r="2" fill="gray" />
+            <circle cx={midpointBC.x} cy={midpointBC.y} r="2" fill="gray" />
+            <circle cx={midpointCA.x} cy={midpointCA.y} r="2" fill="gray" />
+          </>
+        )}
 
-          {/* Vertices (draggable circles) */}
-          <circle
-            cx={vertices.A.x}
-            cy={vertices.A.y}
-            r="6"
-            fill="red"
-            className={`cursor-grab active:cursor-grabbing ${selectedVertex === 'A' ? 'stroke-blue-500 stroke-2' : ''}`}
-            onMouseDown={handleMouseDown('A')}
-          />
-          <circle
-            cx={vertices.B.x}
-            cy={vertices.B.y}
-            r="6"
-            fill="blue"
-            className={`cursor-grab active:cursor-grabbing ${selectedVertex === 'B' ? 'stroke-blue-500 stroke-2' : ''}`}
-            onMouseDown={handleMouseDown('B')}
-          />
-          <circle
-            cx={vertices.C.x}
-            cy={vertices.C.y}
-            r="6"
-            fill="green"
-            className={`cursor-grab active:cursor-grabbing ${selectedVertex === 'C' ? 'stroke-blue-500 stroke-2' : ''}`}
-            onMouseDown={handleMouseDown('C')}
-          />
+        {/* Centroid */}
+        {showCentroid && centroid && (
+          <circle cx={centroid.x} cy={centroid.y} r="4" fill="darkblue" />
+        )}
 
-          {/* Midpoints (small circles) */}
-          <circle cx={midpointAB.x} cy={midpointAB.y} r="3" fill="gray" />
-          <circle cx={midpointBC.x} cy={midpointBC.y} r="3" fill="gray" />
-          <circle cx={midpointCA.x} cy={midpointCA.y} r="3" fill="gray" />
+        {/* Altitudes */}
+        {showAltitudes && (
+          <>
+            <line x1={vertices.A.x} y1={vertices.A.y} x2={altitudeFootA.x} y2={altitudeFootA.y} stroke="red" strokeWidth="1" strokeDasharray="2 1" />
+            <line x1={vertices.B.x} y1={vertices.B.y} x2={altitudeFootB.x} y2={altitudeFootB.y} stroke="green" strokeWidth="1" strokeDasharray="2 1" />
+            <line x1={vertices.C.x} y1={vertices.C.y} x2={altitudeFootC.x} y2={altitudeFootC.y} stroke="blue" strokeWidth="1" strokeDasharray="2 1" />
+            {/* Right angle symbols - simplified for SVG */}
+            <rect x={altitudeFootA.x - 3} y={altitudeFootA.y - 3} width="6" height="6" fill="none" stroke="red" strokeWidth="0.5" transform={`rotate(${Math.atan2(vertices.B.y - vertices.C.y, vertices.B.x - vertices.C.x) * 180 / Math.PI}, ${altitudeFootA.x}, ${altitudeFootA.y})`} />
+          </>
+        )}
 
-          {/* Vertex Labels */}
-          <text x={vertices.A.x} y={vertices.A.y - 10} fontSize="10" textAnchor="middle" fill="red" fontWeight="bold">A</text>
-          <text x={vertices.B.x - 10} y={vertices.B.y + 5} fontSize="10" textAnchor="end" fill="blue" fontWeight="bold">B</text>
-          <text x={vertices.C.x + 10} y={vertices.C.y + 5} fontSize="10" textAnchor="start" fill="green" fontWeight="bold">C</text>
+        {/* Angle Bisectors */}
+        {showAngleBisectors && (
+          <>
+            <line x1={vertices.A.x} y1={vertices.A.y} x2={bisectorPointA.x} y2={bisectorPointA.y} stroke="brown" strokeWidth="1" strokeDasharray="3 2" />
+            <line x1={vertices.B.x} y1={vertices.B.y} x2={bisectorPointB.x} y2={bisectorPointB.y} stroke="darkcyan" strokeWidth="1" strokeDasharray="3 2" />
+            <line x1={vertices.C.x} y1={vertices.C.y} x2={bisectorPointC.x} y2={bisectorPointC.y} stroke="darkgreen" strokeWidth="1" strokeDasharray="3 2" />
+          </>
+        )}
 
-          {/* Side Lengths */}
-          <text
-            x={(vertices.A.x + vertices.B.x) / 2}
-            y={(vertices.A.y + vertices.B.y) / 2 - 5}
-            fontSize="8"
-            textAnchor="middle"
-            fill="black"
-          >
-            AB: { (triangleData.ab / PIXELS_PER_CM).toFixed(1) } cm
+        {/* Exterior Angles */}
+        {showExteriorAngles && (
+          <>
+            {/* Extend side BC from C */}
+            <line x1={vertices.C.x} y1={vertices.C.y} x2={vertices.C.x + (vertices.C.x - vertices.B.x) * 0.5} y2={vertices.C.y + (vertices.C.y - vertices.B.y) * 0.5} stroke="gray" strokeWidth="1" strokeDasharray="2 2" />
+            {/* Exterior angle at C */}
+            <text x={vertices.C.x + (vertices.C.x - vertices.B.x) * 0.2 + (vertices.A.x - vertices.C.x) * 0.05} y={vertices.C.y + (vertices.C.y - vertices.B.y) * 0.2 + (vertices.A.y - vertices.C.y) * 0.05} fontSize="7" fill="darkred">
+              Ext C: {(180 - triangleData.angleC).toFixed(1)}°
+            </text>
+          </>
+        )}
+
+        {/* Vertices (draggable circles) */}
+        <circle
+          cx={vertices.A.x}
+          cy={vertices.A.y}
+          r="5"
+          fill="red"
+          className={`cursor-grab active:cursor-grabbing ${selectedVertex === 'A' ? 'stroke-blue-500 stroke-2' : ''}`}
+          onMouseDown={handleMouseDown('A')}
+        />
+        <circle
+          cx={vertices.B.x}
+          cy={vertices.B.y}
+          r="5"
+          fill="blue"
+          className={`cursor-grab active:cursor-grabbing ${selectedVertex === 'B' ? 'stroke-blue-500 stroke-2' : ''}`}
+          onMouseDown={handleMouseDown('B')}
+        />
+        <circle
+          cx={vertices.C.x}
+          cy={vertices.C.y}
+          r="5"
+          fill="green"
+          className={`cursor-grab active:cursor-grabbing ${selectedVertex === 'C' ? 'stroke-blue-500 stroke-2' : ''}`}
+          onMouseDown={handleMouseDown('C')}
+        />
+
+        {/* Midpoints (small circles) - only if medians are shown */}
+        {showMedians && (
+          <>
+            <circle cx={midpointAB.x} cy={midpointAB.y} r="2" fill="gray" />
+            <circle cx={midpointBC.x} cy={midpointBC.y} r="2" fill="gray" />
+            <circle cx={midpointCA.x} cy={midpointCA.y} r="2" fill="gray" />
+          </>
+        )}
+
+
+        {/* Vertex Labels */}
+        <text x={vertices.A.x} y={vertices.A.y - 8} fontSize="9" textAnchor="middle" fill="red" fontWeight="bold">A</text>
+        <text x={vertices.B.x - 8} y={vertices.B.y + 4} fontSize="9" textAnchor="end" fill="blue" fontWeight="bold">B</text>
+        <text x={vertices.C.x + 8} y={vertices.C.y + 4} fontSize="9" textAnchor="start" fill="green" fontWeight="bold">C</text>
+
+        {/* Side Lengths */}
+        <text
+          x={(vertices.A.x + vertices.B.x) / 2}
+          y={(vertices.A.y + vertices.B.y) / 2 - 5}
+          fontSize="7"
+          textAnchor="middle"
+          fill="black"
+        >
+          AB: { (triangleData.ab / PIXELS_PER_CM).toFixed(1) } cm
+        </text>
+        <text
+          x={(vertices.B.x + vertices.C.x) / 2}
+          y={(vertices.B.y + vertices.C.y) / 2 + 8}
+          fontSize="7"
+          textAnchor="middle"
+          fill="black"
+        >
+          BC: { (triangleData.bc / PIXELS_PER_CM).toFixed(1) } cm
+        </text>
+        <text
+          x={(vertices.C.x + vertices.A.x) / 2}
+          y={(vertices.C.y + vertices.A.y) / 2 - 5}
+          fontSize="7"
+          textAnchor="middle"
+          fill="black"
+        >
+          CA: { (triangleData.ca / PIXELS_PER_CM).toFixed(1) } cm
+        </text>
+
+        {/* Angle Measures */}
+        {showInteriorAngles && (
+          <>
+            <text
+              x={vertices.A.x + (vertices.B.x - vertices.A.x) * 0.1 + (vertices.C.x - vertices.A.x) * 0.1}
+              y={vertices.A.y + (vertices.B.y - vertices.A.y) * 0.1 + (vertices.C.y - vertices.A.y) * 0.1}
+              fontSize="7"
+              fill="purple"
+              textAnchor="middle"
+            >
+              A: {triangleData.angleA.toFixed(1)}°
+            </text>
+            <text
+              x={vertices.B.x + (vertices.A.x - vertices.B.x) * 0.1 + (vertices.C.x - vertices.B.x) * 0.1}
+              y={vertices.B.y + (vertices.A.y - vertices.B.y) * 0.1 + (vertices.C.y - vertices.B.y) * 0.1}
+              fontSize="7"
+              fill="purple"
+              textAnchor="middle"
+            >
+              B: {triangleData.angleB.toFixed(1)}°
+            </text>
+            <text
+              x={vertices.C.x + (vertices.A.x - vertices.C.x) * 0.1 + (vertices.B.x - vertices.C.x) * 0.1}
+              y={vertices.C.y + (vertices.A.y - vertices.C.y) * 0.1 + (vertices.B.y - vertices.C.y) * 0.1}
+              fontSize="7"
+              fill="purple"
+              textAnchor="middle"
+            >
+              C: {triangleData.angleC.toFixed(1)}°
+            </text>
+          </>
+        )}
+
+        {/* Angle Sum */}
+        {showInteriorAngles && (
+          <text x={SVG_VIEWBOX_SIZE / 2} y={SVG_VIEWBOX_SIZE - 5} fontSize="7" textAnchor="middle" fill="darkblue">
+            Sum: {(triangleData.angleA + triangleData.angleB + triangleData.angleC).toFixed(1)}°
           </text>
-          <text
-            x={(vertices.B.x + vertices.C.x) / 2}
-            y={(vertices.B.y + vertices.C.y) / 2 + 10}
-            fontSize="8"
-            textAnchor="middle"
-            fill="black"
-          >
-            BC: { (triangleData.bc / PIXELS_PER_CM).toFixed(1) } cm
-          </text>
-          <text
-            x={(vertices.C.x + vertices.A.x) / 2}
-            y={(vertices.C.y + vertices.A.y) / 2 - 5}
-            fontSize="8"
-            textAnchor="middle"
-            fill="black"
-          >
-            CA: { (triangleData.ca / PIXELS_PER_CM).toFixed(1) } cm
-          </text>
+        )}
 
-          {/* Angle Measures */}
-          {/* Position angle text slightly away from the vertex */}
-          <text
-            x={vertices.A.x + (vertices.B.x - vertices.A.x) * 0.1 + (vertices.C.x - vertices.A.x) * 0.1}
-            y={vertices.A.y + (vertices.B.y - vertices.A.y) * 0.1 + (vertices.C.y - vertices.A.y) * 0.1}
-            fontSize="8"
-            fill="purple"
-            textAnchor="middle"
-          >
-            A: {triangleData.angleA.toFixed(1)}°
-          </text>
-          <text
-            x={vertices.B.x + (vertices.A.x - vertices.B.x) * 0.1 + (vertices.C.x - vertices.B.x) * 0.1}
-            y={vertices.B.y + (vertices.A.y - vertices.B.y) * 0.1 + (vertices.C.y - vertices.B.y) * 0.1}
-            fontSize="8"
-            fill="purple"
-            textAnchor="middle"
-          >
-            B: {triangleData.angleB.toFixed(1)}°
-          </text>
-          <text
-            x={vertices.C.x + (vertices.A.x - vertices.C.x) * 0.1 + (vertices.B.x - vertices.C.x) * 0.1}
-            y={vertices.C.y + (vertices.A.y - vertices.C.y) * 0.1 + (vertices.B.y - vertices.C.y) * 0.1}
-            fontSize="8"
-            fill="purple"
-            textAnchor="middle"
-          >
-            C: {triangleData.angleC.toFixed(1)}°
-          </text>
+        {/* Area and Perimeter */}
+        {showAreaPerimeter && (
+          <>
+            <text x={SVG_VIEWBOX_SIZE / 2} y={SVG_VIEWBOX_SIZE - 20} fontSize="7" textAnchor="middle" fill="darkgreen">
+              Area: {(triangleData.area / (PIXELS_PER_CM * PIXELS_PER_CM)).toFixed(2)} cm²
+            </text>
+            <text x={SVG_VIEWBOX_SIZE / 2} y={SVG_VIEWBOX_SIZE - 10} fontSize="7" textAnchor="middle" fill="darkorange">
+              Perimeter: {(triangleData.perimeter / PIXELS_PER_CM).toFixed(1)} cm
+            </text>
+          </>
+        )}
 
-        </svg>
+        {/* Pythagorean Theorem (conditional) */}
+        {showPythagoreanTheorem && isRightTriangle && (
+          <text x={SVG_VIEWBOX_SIZE / 2} y={15} fontSize="7" textAnchor="middle" fill="red" fontWeight="bold">
+            a² + b² = c² (Right Triangle)
+          </text>
+        )}
+        {showPythagoreanTheorem && !isRightTriangle && (
+          <text x={SVG_VIEWBOX_SIZE / 2} y={15} fontSize="7" textAnchor="middle" fill="gray">
+            (Not a Right Triangle)
+          </text>
+        )}
+
+      </svg>
+    </div>
+  );
+};
+
+
+const App = () => {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-inter">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Interactive Triangle Properties</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+        <TriangleVisualizer
+          initialVertices={{ A: { x: 100, y: 50 }, B: { x: 50, y: 150 }, C: { x: 150, y: 150 } }}
+          title="Medians"
+          description="A median joins a vertex to the midpoint of the opposite side. The three medians intersect at the centroid."
+          showMedians={true}
+          showCentroid={true}
+          showAreaPerimeter={true}
+        />
+        <TriangleVisualizer
+          initialVertices={{ A: { x: 100, y: 50 }, B: { x: 50, y: 150 }, C: { x: 150, y: 150 } }}
+          title="Altitudes"
+          description="An altitude is a perpendicular segment from a vertex to the line containing the opposite side."
+          showAltitudes={true}
+          showAreaPerimeter={true}
+        />
+        <TriangleVisualizer
+          initialVertices={{ A: { x: 100, y: 50 }, B: { x: 50, y: 150 }, C: { x: 150, y: 150 } }}
+          title="Exterior Angles"
+          description="An exterior angle is formed by one side and the extension of an adjacent side."
+          showExteriorAngles={true}
+          showInteriorAngles={true}
+        />
+        <TriangleVisualizer
+          initialVertices={{ A: { x: 100, y: 50 }, B: { x: 50, y: 150 }, C: { x: 150, y: 150 } }}
+          title="Angle Bisectors"
+          description="An angle bisector divides one of the triangle's angles into two equal angles."
+          showAngleBisectors={true}
+        />
+        <TriangleVisualizer
+          initialVertices={{ A: { x: 100, y: 50 }, B: { x: 50, y: 150 }, C: { x: 150, y: 150 } }}
+          title="Interior Angle Sum"
+          description="The sum of the interior angles of any triangle is always 180 degrees."
+          showInteriorAngles={true}
+        />
+        <TriangleVisualizer
+          initialVertices={{ A: { x: 100, y: 50 }, B: { x: 100, y: 150 }, C: { x: 200, y: 150 } }}
+          title="Pythagorean Theorem"
+          description="In a right triangle, a² + b² = c². Drag vertices to form a right triangle."
+          showInteriorAngles={true}
+          showPythagoreanTheorem={true}
+        />
       </div>
+    <div className="mt-8 text-center text-gray-600">
+          <p>For more detailed explanations and examples, please refer to the relevant sections in the documentation or educational resources.</p>
+          <p>Feel free to explore the properties of triangles and their applications in various mathematical contexts.</p>
+          <p>Happy learning!</p>
+          <p>For more information, visit the <a href="https://www.mathsisfun.com/geometry" target="_blank" rel="noopener noreferrer">Math is Fun - Triangles</a> page.</p>
+          <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/math/triangles#upper-elementary" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
+          <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
+          <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
+          <p>For more resources and interactive tools, check out the <a href="https://www.mathopenref.com/" target="_blank" rel="noopener noreferrer">Math Open Reference - Triangle Properties</a> page.</p>
+          <p>For a visual representation of triangle properties, visit the <a href="https://www.desmos.com/calculator/triangle-properties" target="_blank" rel="noopener noreferrer">Desmos Triangle Properties</a> page.</p>
+          <p>For a comprehensive overview of triangle properties, refer to the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
+          <p>For a detailed explanation of triangle medians, altitudes, and centroids, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles/triangle-properties/v/triangle-median-altitude-and-centroid" target="_blank" rel="noopener noreferrer">Khan Academy - Triangle Medians, Altitudes, and Centroids</a> page.</p>
+          <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
+          <p>For a detailed explanation of triangle properties, visit the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
+          <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/m/xy3x5v7c" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
+          <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
+          <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
+          <p>For a detailed explanation of the Pythagorean theorem, visit the <a href="https://www.pythagorean-theorem.net/" target="_blank" rel="
+  noopener noreferrer">Pythagorean Theorem</a> page.</p>
+    </div>
     </div>
   );
 };
 
 export default App;
 
-
-//           <li>Altitudes: An altitude of a triangle is a perpendicular segment from a vertex to the line containing the opposite side.</li>
-//           <li>Centroids: The centroid of a triangle is the point where the three medians intersect, and it is also the center of mass of the triangle.</li>
-//           <li>Exterior Angles: An exterior angle of a triangle is formed by one side of the triangle and the extension of the adjacent side.</li>
-//           <li>Interior Angles: The angles inside a triangle, which always sum to 180 degrees.</li>
-//           <li>Angle Sum: The sum of the interior angles of a triangle is always 180 degrees.</li>
-//           <li>Angle Bisectors: An angle bisector of a triangle is a line segment that bisects one of the triangle&apos;s angles, dividing it into two equal angles.</li>
-//           <li>Pythagorean Theorem: In a right triangle, the square of the length of the hypotenuse is equal to the sum of the squares of the lengths of the other two sides (a² + b² = c²).</li>
-//           <li>Area: The area of a triangle can be calculated using the formula A = 1/2 * base * height.</li>
-//           <li>Perimeter: The perimeter of a triangle is the sum of the lengths of its three sides.</li>
-//         </ul>
-//         <p>For more detailed explanations and examples, please refer to the relevant sections in the documentation or educational resources.</p>
-//         <p>Feel free to explore the properties of triangles and their applications in various mathematical contexts.</p>
-//         <p>Happy learning!</p>
-//         <p>For more information, visit the <a href="https://www.mathsisfun.com/geometry" target="_blank" rel="noopener noreferrer">Math is Fun - Triangles</a> page.</p>
-//         <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/math/triangles#upper-elementary" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
-//         <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
-//         <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-//         <p>For more resources and interactive tools, check out the <a href="https://www.mathopenref.com/" target="_blank" rel="noopener noreferrer">Math Open Reference - Triangle Properties</a> page.</p>
-//         <p>For a visual representation of triangle properties, visit the <a href="https://www.desmos.com/calculator/triangle-properties" target="_blank" rel="noopener noreferrer">Desmos Triangle Properties</a> page.</p>
-//         <p>For a comprehensive overview of triangle properties, refer to the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
-//         <p>For a detailed explanation of triangle medians, altitudes, and centroids, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles/triangle-properties/v/triangle-median-altitude-and-centroid" target="_blank" rel="noopener noreferrer">Khan Academy - Triangle Medians, Altitudes, and Centroids</a> page.</p>
-//         <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-//         <p>For a detailed explanation of triangle properties, visit the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
-//         <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/m/xy3x5v7c" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
-//         <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
-//         <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-//         <p>For a detailed explanation of the Pythagorean theorem, visit the <a href="https://www.pythagorean-theorem.net/" target="_blank" rel="
-// noopener noreferrer">Pythagorean Theorem</a> page.</p>
-//    </>
