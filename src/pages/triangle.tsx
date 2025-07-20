@@ -101,6 +101,7 @@ interface TriangleProps {
   showAngleBisectors?: boolean;
   showPythagoreanTheorem?: boolean; // For a dedicated right triangle example
   showAreaPerimeter?: boolean;
+  showLegsAndHypotenuse?: boolean; // For Pythagorean theorem example
 }
 
 const TriangleVisualizer: React.FC<TriangleProps> = ({
@@ -115,10 +116,12 @@ const TriangleVisualizer: React.FC<TriangleProps> = ({
   showAngleBisectors = false,
   showPythagoreanTheorem = false,
   showAreaPerimeter = false,
+  showLegsAndHypotenuse = false, // For Pythagorean theorem example
 }) => {
   const [vertices, setVertices] = useState(initialVertices);
   const [draggingVertex, setDraggingVertex] = useState<VertexKey | null>(null);
   const [selectedVertex, setSelectedVertex] = useState<VertexKey>('A');
+
 
   const [triangleData, setTriangleData] = useState({
     ab: 0, bc: 0, ca: 0,
@@ -353,7 +356,7 @@ const TriangleVisualizer: React.FC<TriangleProps> = ({
           textAnchor="middle"
           fill="black"
         >
-          AB: { (triangleData.ab / PIXELS_PER_CM).toFixed(1) } cm
+          AB: {(triangleData.ab / PIXELS_PER_CM).toFixed(1)} cm
         </text>
         <text
           x={(vertices.B.x + vertices.C.x) / 2}
@@ -362,7 +365,7 @@ const TriangleVisualizer: React.FC<TriangleProps> = ({
           textAnchor="middle"
           fill="black"
         >
-          BC: { (triangleData.bc / PIXELS_PER_CM).toFixed(1) } cm
+          BC: {(triangleData.bc / PIXELS_PER_CM).toFixed(1)} cm
         </text>
         <text
           x={(vertices.C.x + vertices.A.x) / 2}
@@ -371,7 +374,7 @@ const TriangleVisualizer: React.FC<TriangleProps> = ({
           textAnchor="middle"
           fill="black"
         >
-          CA: { (triangleData.ca / PIXELS_PER_CM).toFixed(1) } cm
+          CA: {(triangleData.ca / PIXELS_PER_CM).toFixed(1)} cm
         </text>
 
         {/* Angle Measures */}
@@ -437,6 +440,21 @@ const TriangleVisualizer: React.FC<TriangleProps> = ({
             (Not a Right Triangle)
           </text>
         )}
+        {/* Legs and Hypotenuse (for Pythagorean theorem example) */}
+        {showPythagoreanTheorem && isRightTriangle && showLegsAndHypotenuse && (
+        // hypotenuse and legs b and c show its names 
+          <>
+            <text x={(vertices.A.x + vertices.B.x) / 2 -13} y={(vertices.A.y + vertices.B.y) / 2 - 15} fontSize="7" textAnchor="middle" fill="black">
+              Leg
+            </text>
+            <text x={(vertices.B.x + vertices.C.x) / 2 - 13} y={(vertices.B.y + vertices.C.y) / 2 + 20} fontSize="7" textAnchor="middle" fill="black">
+              Leg
+            </text>
+            <text x={(vertices.C.x + vertices.A.x) / 2 + 13} y={(vertices.C.y + vertices.A.y) / 2 - 10} fontSize="7" textAnchor="middle" fill="black">
+              Hypotenuse 
+            </text>
+          </>
+        )}
 
       </svg>
     </div>
@@ -484,33 +502,39 @@ const App = () => {
           showInteriorAngles={true}
         />
         <TriangleVisualizer
+
           initialVertices={{ A: { x: 100, y: 50 }, B: { x: 100, y: 150 }, C: { x: 200, y: 150 } }}
           title="Pythagorean Theorem"
           description="In a right triangle, a² + b² = c². Drag vertices to form a right triangle."
           showInteriorAngles={true}
           showPythagoreanTheorem={true}
+          // show of legs and hypotenuse 
+
+          showLegsAndHypotenuse={true}
+
+
         />
       </div>
-    <div className="mt-8 text-center text-gray-600">
-          <p>For more detailed explanations and examples, please refer to the relevant sections in the documentation or educational resources.</p>
-          <p>Feel free to explore the properties of triangles and their applications in various mathematical contexts.</p>
-          <p>Happy learning!</p>
-          <p>For more information, visit the <a href="https://www.mathsisfun.com/geometry" target="_blank" rel="noopener noreferrer">Math is Fun - Triangles</a> page.</p>
-          <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/math/triangles#upper-elementary" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
-          <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
-          <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-          <p>For more resources and interactive tools, check out the <a href="https://www.mathopenref.com/" target="_blank" rel="noopener noreferrer">Math Open Reference - Triangle Properties</a> page.</p>
-          <p>For a visual representation of triangle properties, visit the <a href="https://www.desmos.com/calculator/triangle-properties" target="_blank" rel="noopener noreferrer">Desmos Triangle Properties</a> page.</p>
-          <p>For a comprehensive overview of triangle properties, refer to the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
-          <p>For a detailed explanation of triangle medians, altitudes, and centroids, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles/triangle-properties/v/triangle-median-altitude-and-centroid" target="_blank" rel="noopener noreferrer">Khan Academy - Triangle Medians, Altitudes, and Centroids</a> page.</p>
-          <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-          <p>For a detailed explanation of triangle properties, visit the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
-          <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/m/xy3x5v7c" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
-          <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
-          <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-          <p>For a detailed explanation of the Pythagorean theorem, visit the <a href="https://www.pythagorean-theorem.net/" target="_blank" rel="
+      <div className="mt-8 text-center text-gray-600">
+        <p>For more detailed explanations and examples, please refer to the relevant sections in the documentation or educational resources.</p>
+        <p>Feel free to explore the properties of triangles and their applications in various mathematical contexts.</p>
+        <p>Happy learning!</p>
+        <p>For more information, visit the <a href="https://www.mathsisfun.com/geometry" target="_blank" rel="noopener noreferrer">Math is Fun - Triangles</a> page.</p>
+        <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/math/triangles#upper-elementary" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
+        <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
+        <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
+        <p>For more resources and interactive tools, check out the <a href="https://www.mathopenref.com/" target="_blank" rel="noopener noreferrer">Math Open Reference - Triangle Properties</a> page.</p>
+        <p>For a visual representation of triangle properties, visit the <a href="https://www.desmos.com/calculator/triangle-properties" target="_blank" rel="noopener noreferrer">Desmos Triangle Properties</a> page.</p>
+        <p>For a comprehensive overview of triangle properties, refer to the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
+        <p>For a detailed explanation of triangle medians, altitudes, and centroids, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles/triangle-properties/v/triangle-median-altitude-and-centroid" target="_blank" rel="noopener noreferrer">Khan Academy - Triangle Medians, Altitudes, and Centroids</a> page.</p>
+        <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
+        <p>For a detailed explanation of triangle properties, visit the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
+        <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/m/xy3x5v7c" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
+        <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
+        <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
+        <p>For a detailed explanation of the Pythagorean theorem, visit the <a href="https://www.pythagorean-theorem.net/" target="_blank" rel="
   noopener noreferrer">Pythagorean Theorem</a> page.</p>
-    </div>
+      </div>
     </div>
   );
 };
