@@ -11,12 +11,14 @@ export default function Navbar() {
         <Link href="/" className="text-2xl font-bold tracking-tight">
           Math Teacher
         </Link>
-        <div className="flex gap-6 items-center">
+        <div className="flex gap-6 items-center"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
           <Link href="/" className="hover:underline">Home</Link>
           <div
             className="relative"
             onMouseEnter={() => setIsDropdownOpen(true)}
-            onMouseLeave={() => setIsDropdownOpen(false)}
+            // onMouseLeave={() => setIsDropdownOpen(false)}
           >
             <button className="hover:underline focus:outline-none">
               Class 2
