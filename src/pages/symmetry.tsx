@@ -5,6 +5,7 @@
 // symmetry in everyday objects, like leaves, flowers, and animals
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 // Helper component for displaying a shape with its lines of symmetry
 const ShapeWithSymmetry: React.FC<{ name: string; lines: number; svgPath: string; symmetryLinesSvg?: string }> = ({ name, lines, svgPath, symmetryLinesSvg }) => {
@@ -282,11 +283,12 @@ export default function SymmetryPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
                         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Nature 🌿</h3>
-                        <img
+                        <Image
                             src="https://placehold.co/300x200/A7F3D0/10B981?text=Butterfly"
                             alt="Butterfly with symmetry"
+                            width={300}
+                            height={200}
                             className="w-full h-auto rounded-lg mb-4 object-cover"
-                            onError={(e) => { e.currentTarget.src = 'https://placehold.co/300x200/A7F3D0/10B981?text=Image+Not+Found'; }}
                         />
                         <p className="text-lg text-gray-700 text-center">
                             Many animals (like butterflies), flowers, and leaves exhibit bilateral symmetry. Snowflakes show rotational symmetry.
@@ -295,11 +297,12 @@ export default function SymmetryPage() {
 
                     <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
                         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Art & Architecture 🏛️</h3>
-                        <img
+                        <Image
                             src="https://placehold.co/300x200/BFDBFE/2563EB?text=Taj+Mahal"
                             alt="Taj Mahal with symmetry"
+                            width={300}
+                            height={200}
                             className="w-full h-auto rounded-lg mb-4 object-cover"
-                            onError={(e) => { e.currentTarget.src = 'https://placehold.co/300x200/BFDBFE/2563EB?text=Image+Not+Found'; }}
                         />
                         <p className="text-lg text-gray-700 text-center">
                             From ancient temples to modern buildings, artists and architects use symmetry to create visually pleasing and stable structures.
@@ -308,11 +311,12 @@ export default function SymmetryPage() {
 
                     <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
                         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Everyday Objects ☕</h3>
-                        <img
+                        <Image
                             src="https://placehold.co/300x200/FEE2E2/EF4444?text=Chair"
                             alt="Chair with symmetry"
+                            width={300}
+                            height={200}
                             className="w-full h-auto rounded-lg mb-4 object-cover"
-                            onError={(e) => { e.currentTarget.src = 'https://placehold.co/300x200/FEE2E2/EF4444?text=Image+Not+Found'; }}
                         />
                         <p className="text-lg text-gray-700 text-center">
                             Many common items like chairs, cars, and even your smartphone often have symmetrical designs for functionality and aesthetics.
