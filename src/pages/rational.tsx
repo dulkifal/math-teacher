@@ -37,6 +37,8 @@ export default function RationalNumbers() {
               <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Number-line.svg/512px-Number-line.svg.png"
                 alt="Number line"
+                width={512}
+                height={214}
                 className="w-full max-w-md mx-auto my-2"
               />
             </div>
@@ -76,6 +78,8 @@ export default function RationalNumbers() {
               <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Cube_fraction.svg/320px-Cube_fraction.svg.png"
                 alt="Fraction of a cube"
+                width={320}
+                height={320}
                 className="w-40 mx-auto"
               />
             </div>
