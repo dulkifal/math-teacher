@@ -284,11 +284,11 @@ export default function SymmetryPage() {
                     <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
                         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Nature 🌿</h3>
                         <Image
-                            src="https://placehold.co/300x200/A7F3D0/10B981?text=Butterfly"
+                            src="/images/butterfly.png"
                             alt="Butterfly with symmetry"
                             width={300}
-                            height={200}
-                            className="w-full h-auto rounded-lg mb-4 object-cover"
+                            height={300}
+                            className="w-full h-auto rounded-lg mb-4 object-cover aspect-video"
                         />
                         <p className="text-lg text-gray-700 text-center">
                             Many animals (like butterflies), flowers, and leaves exhibit bilateral symmetry. Snowflakes show rotational symmetry.
@@ -298,11 +298,11 @@ export default function SymmetryPage() {
                     <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
                         <h3 className="text-2xl font-semibold mb-4 text-gray-800">Art & Architecture 🏛️</h3>
                         <Image
-                            src="https://placehold.co/300x200/BFDBFE/2563EB?text=Taj+Mahal"
+                            src="/images/taj_mahal.png"
                             alt="Taj Mahal with symmetry"
                             width={300}
-                            height={200}
-                            className="w-full h-auto rounded-lg mb-4 object-cover"
+                            height={300}
+                            className="w-full h-auto rounded-lg mb-4 object-cover aspect-video"
                         />
                         <p className="text-lg text-gray-700 text-center">
                             From ancient temples to modern buildings, artists and architects use symmetry to create visually pleasing and stable structures.
@@ -310,16 +310,16 @@ export default function SymmetryPage() {
                     </div>
 
                     <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center">
-                        <h3 className="text-2xl font-semibold mb-4 text-gray-800">Everyday Objects ☕</h3>
+                        <h3 className="text-2xl font-semibold mb-4 text-gray-800">Everyday Objects ⏰</h3>
                         <Image
-                            src="https://placehold.co/300x200/FEE2E2/EF4444?text=Chair"
-                            alt="Chair with symmetry"
+                            src="/images/clock.png"
+                            alt="Symmetrical wall clock"
                             width={300}
-                            height={200}
-                            className="w-full h-auto rounded-lg mb-4 object-cover"
+                            height={300}
+                            className="w-full h-auto rounded-lg mb-4 object-cover aspect-video"
                         />
                         <p className="text-lg text-gray-700 text-center">
-                            Many common items like chairs, cars, and even your smartphone often have symmetrical designs for functionality and aesthetics.
+                            Many common items like clocks, steering wheels, and decorative items utilize symmetrical designs for both balance and aesthetic appeal.
                         </p>
                     </div>
                 </div>
