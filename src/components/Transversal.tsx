@@ -167,37 +167,37 @@ export default function Transversal() {
     return (
         <div ref={ref} style={containerStyle}>
             <div className="flex items-center justify-between w-full mb-2 px-4">
-                <h2 className="text-center flex-1">Transversal Lines and Angles Visualization</h2>
-              </div>
+                <h2 className="text-center flex-1 text-slate-700 font-bold">Transversal Lines and Angles Visualization</h2>
+            </div>
             <div className="flex items-center justify-center mb-4">
-               
-               <button
+
+                <button
                     onClick={handleReset}
-                    className="ml-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 border border-gray-400"
+                    className="ml-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold border border-slate-300 rounded-xl transition duration-200 text-sm"
                 >
                     Reset
                 </button>
                 <button
                     onClick={handleCorresponding}
-                    className="ml-4 px-4 py-2 bg-yellow-200 rounded hover:bg-yellow-300 border border-yellow-400"
+                    className="ml-2 px-4 py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold border border-amber-200 rounded-xl transition duration-200 text-sm"
                 >
                     Corresponding
                 </button>
                 <button
                     onClick={handleAlternateInterior}
-                    className="ml-4 px-4 py-2 bg-green-200 rounded hover:bg-green-300 border border-green-400"
+                    className="ml-2 px-4 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold border border-emerald-200 rounded-xl transition duration-200 text-sm"
                 >
                     Alternate Interior
                 </button>
                 <button
                     onClick={handleAlternateExterior}
-                    className="ml-4 px-4 py-2 bg-purple-200 rounded hover:bg-purple-300 border border-purple-400"
+                    className="ml-2 px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold border border-purple-200 rounded-xl transition duration-200 text-sm"
                 >
                     Alternate Exterior
                 </button>
                 <button
                     onClick={handleSameSideInterior}
-                    className="ml-4 px-4 py-2 bg-blue-200 rounded hover:bg-blue-300 border border-blue-400"
+                    className="ml-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold border border-blue-200 rounded-xl transition duration-200 text-sm"
                 >
                     Same Side Interior
                 </button>
@@ -264,21 +264,20 @@ export default function Transversal() {
 
                             // Highlight logic
                             let highlight = false;
-                            if (highlightIdx !== null && highlightType === 'corresponding') {
-                                const [i1, i2] = correspondingPairs[highlightIdx];
-                                highlight = idx === i1 || idx === i2;
-                            }
-                            if (highlightIdx !== null && highlightType === 'alternateInterior') {
-                                const [i1, i2] = alternateInteriorPairs[highlightIdx];
-                                highlight = idx === i1 || idx === i2;
-                            }
-                            if (highlightIdx !== null && highlightType === 'alternateExterior') {
-                                const [i1, i2] = alternateExteriorPairs[highlightIdx];
-                                highlight = idx === i1 || idx === i2;
-                            }
-                            if (highlightIdx !== null && highlightType === 'sameSideInterior') {
-                                const [i1, i2] = sameSideInteriorPairs[highlightIdx];
-                                highlight = idx === i1 || idx === i2;
+                            if (highlightIdx !== null) {
+                                if (highlightType === 'corresponding' && correspondingPairs[highlightIdx]) {
+                                    const [i1, i2] = correspondingPairs[highlightIdx];
+                                    highlight = idx === i1 || idx === i2;
+                                } else if (highlightType === 'alternateInterior' && alternateInteriorPairs[highlightIdx]) {
+                                    const [i1, i2] = alternateInteriorPairs[highlightIdx];
+                                    highlight = idx === i1 || idx === i2;
+                                } else if (highlightType === 'alternateExterior' && alternateExteriorPairs[highlightIdx]) {
+                                    const [i1, i2] = alternateExteriorPairs[highlightIdx];
+                                    highlight = idx === i1 || idx === i2;
+                                } else if (highlightType === 'sameSideInterior' && sameSideInteriorPairs[highlightIdx]) {
+                                    const [i1, i2] = sameSideInteriorPairs[highlightIdx];
+                                    highlight = idx === i1 || idx === i2;
+                                }
                             }
 
                             return (

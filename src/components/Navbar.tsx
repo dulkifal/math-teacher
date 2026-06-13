@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 import { useState } from "react";
 
 const topicLinks = [
@@ -9,6 +9,8 @@ const topicLinks = [
   { name: "Symmetry", href: "/symmetry" },
   { name: "Cube Roots", href: "/cube" },
   { name: "Rational Numbers", href: "/rational" },
+  { name: "Fractions", href: "/fractions" },
+  { name: "Linear Grapher", href: "/grapher" },
 ];
 
 export default function Navbar() {
@@ -30,10 +32,17 @@ export default function Navbar() {
           >
             Home
           </Link>
+          <Show when="signed-in">
+            <Link
+              href="/dashboard"
+              className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+            >
+              Dashboard
+            </Link>
+          </Show>
           <div
             className="relative"
             onClick={() => setIsDropdownOpen(isDropdownOpen => !isDropdownOpen)}
-          
           >
             <button className="text-gray-600 hover:text-blue-600 font-medium focus:outline-none flex items-center transition-colors">
               <span>Topics</span>
@@ -75,16 +84,16 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="flex items-center">
-          <SignedOut>
+          <Show when="signed-out">
             <SignInButton mode="modal">
               <button className="bg-blue-600 text-white font-bold py-2 px-4 rounded-full hover:bg-blue-700 transition duration-300 transform hover:scale-105">
                 Sign In
               </button>
             </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
         </div>
       </div>
     </nav>
