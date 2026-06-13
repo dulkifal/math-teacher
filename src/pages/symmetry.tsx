@@ -348,8 +348,7 @@ const PaperFoldingDemo: React.FC = () => {
         if (x <= paperSize / 2 && y <= paperSize / 2) {
             setHoles([...holes, { x, y }]);
         } else {
-            // Optional: Provide feedback to the user that they can only punch in the top-left
-            console.log("Please click within the top-left quadrant to punch a hole.");
+            // Only top-left quadrant is valid for punching holes
         }
     };
 

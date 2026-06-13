@@ -14,7 +14,7 @@ type QuizAttempt = {
 const allLessons = [
   { id: "angle", name: "Angles", icon: "📐", href: "/angle", desc: "Understand angles and transversals." },
   { id: "addition", name: "Addition & Subtraction", icon: "➕", href: "/addition", desc: "Visual addition on a number line." },
-  { id: "triangle", name: "Triangles", icon: "🔺", href: "/triangle", desc: "Explore altitutes and medians." },
+  { id: "triangle", name: "Triangles", icon: "🔺", href: "/triangle", desc: "Explore altitudes and medians." },
   { id: "symmetry", name: "Symmetry", icon: "🎨", href: "/symmetry", desc: "Discover rotational & reflectional symmetry." },
   { id: "cube", name: "Cube Roots", icon: "🧊", href: "/cube", desc: "Challenge yourself with cube roots." },
   { id: "rational", name: "Rational Numbers", icon: "➗", href: "/rational", desc: "Understand ratios and numbers." },

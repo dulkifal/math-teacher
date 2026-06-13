@@ -12,8 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('/sw.js')
-        .then(reg => console.log('SW registered:', reg.scope))
-        .catch(err => console.error('SW error:', err))
+        .catch(err => console.error('SW registration failed:', err))
     }
   }, [])
 
