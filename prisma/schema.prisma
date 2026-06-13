@@ -58,3 +58,62 @@ model AnswerHistory {
   timeSpentMs Int?
   createdAt   DateTime @default(now())
 }
+
+model LearningPlan {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  description String?
+  createdAt   DateTime  @default(now())
+  steps       PlanStep[]
+  userPlans   UserLearningPlan[]
+}
+
+model PlanStep {
+  id              String       @id @default(cuid())
+  planId          String
+  title           String
+  description     String?
+  lessonId        String?
+  order           Int
+  estimatedMinutes Int?
+  resources       Json?
+  plan            LearningPlan @relation(fields: [planId], references: [id])
+  userProgress    UserPlanStepProgress[]
+
+  @@index([planId, order])
+}
+
+enum StepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+model UserLearningPlan {
+  id         String      @id @default(cuid())
+  userId     String
+  planId     String
+  startedAt  DateTime    @default(now())
+  completedAt DateTime?
+  progress   Float       @default(0.0)
+
+  plan       LearningPlan @relation(fields: [planId], references: [id])
+  stepProgress UserPlanStepProgress[]
+
+  @@unique([userId, planId])
+}
+
+model UserPlanStepProgress {
+  id         String           @id @default(cuid())
+  userPlanId String
+  stepId     String
+  status     StepStatus       @default(PENDING)
+  completedAt DateTime?
+  attempts   Int              @default(0)
+
+  userPlan   UserLearningPlan @relation(fields: [userPlanId], references: [id])
+  step       PlanStep         @relation(fields: [stepId], references: [id])
+
+  @@unique([userPlanId, stepId])
+}
