@@ -12,15 +12,36 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background: #ffffff;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+}
+
+/* ── iOS safe area for PWA installed on phone ── */
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ── Smooth scrolling ── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Responsive images ── */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Remove tap highlight on mobile ── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Better touch targets on mobile ── */
+button, a {
+  touch-action: manipulation;
 }
