@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCompass, faBook, faGraduationCap } from '@fortawesome/free-solid-svg-icons';
 
 // Define a scaling factor for converting pixels to 'cm' for display purposes
 const PIXELS_PER_CM = 10; // 10 pixels = 1 cm
@@ -515,25 +517,99 @@ const App = () => {
 
         />
       </div>
-      <div className="mt-8 text-center text-gray-600">
-        <p>For more detailed explanations and examples, please refer to the relevant sections in the documentation or educational resources.</p>
-        <p>Feel free to explore the properties of triangles and their applications in various mathematical contexts.</p>
-        <p>Happy learning!</p>
-        <p>For more information, visit the <a href="https://www.mathsisfun.com/geometry" target="_blank" rel="noopener noreferrer">Math is Fun - Triangles</a> page.</p>
-        <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/math/triangles#upper-elementary" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
-        <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
-        <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-        <p>For more resources and interactive tools, check out the <a href="https://www.mathopenref.com/" target="_blank" rel="noopener noreferrer">Math Open Reference - Triangle Properties</a> page.</p>
-        <p>For a visual representation of triangle properties, visit the <a href="https://www.desmos.com/calculator/triangle-properties" target="_blank" rel="noopener noreferrer">Desmos Triangle Properties</a> page.</p>
-        <p>For a comprehensive overview of triangle properties, refer to the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
-        <p>For a detailed explanation of triangle medians, altitudes, and centroids, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles/triangle-properties/v/triangle-median-altitude-and-centroid" target="_blank" rel="noopener noreferrer">Khan Academy - Triangle Medians, Altitudes, and Centroids</a> page.</p>
-        <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-        <p>For a detailed explanation of triangle properties, visit the <a href="https://www.mathsisfun.com/geometry/triangle-properties.html" target="_blank" rel="noopener noreferrer">Math is Fun - Triangle Properties</a> page.</p>
-        <p>For interactive examples and visualizations, check out the <a href="https://www.geogebra.org/m/xy3x5v7c" target="_blank" rel="noopener noreferrer">GeoGebra Triangle Resources</a>.</p>
-        <p>For practice problems and quizzes, visit the <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer">Khan Academy - Triangles</a> page.</p>
-        <p>For a comprehensive guide on triangle properties, refer to the <a href="https://www.cuemath.com/geometry/triangle-properties/" target="_blank" rel="noopener noreferrer">Cuemath - Triangle Properties</a> page.</p>
-        <p>For a detailed explanation of the Pythagorean theorem, visit the <a href="https://www.pythagorean-theorem.net/" target="_blank" rel="
-  noopener noreferrer">Pythagorean Theorem</a> page.</p>
+      {/* Premium Educational Resources Section */}
+      <div className="mt-12 w-full max-w-4xl bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2 text-center">Educational Resources</h2>
+        <p className="text-gray-600 text-center mb-8 max-w-xl mx-auto">
+          Deepen your understanding of triangle properties, theorems, and formulas with these interactive tools and tutorials.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Interactive Sandboxes */}
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-100 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white mb-4 shadow-md">
+                <FontAwesomeIcon icon={faCompass} className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-lg text-gray-800 mb-2">Interactive Visuals</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Explore real-time simulations and coordinate geometry visualizers.
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="https://www.geogebra.org/math/triangles#upper-elementary" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">
+                    GeoGebra Triangle Sandbox
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.desmos.com/calculator/triangle-properties" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">
+                    Desmos Triangle Visualizer
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Card 2: Theory & Guides */}
+          <div className="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-xl border border-emerald-100 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 bg-emerald-500 rounded-lg flex items-center justify-center text-white mb-4 shadow-md">
+                <FontAwesomeIcon icon={faBook} className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-lg text-gray-800 mb-2">Detailed Theory</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Read explanations about properties, types of triangles, and rules.
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="https://www.mathsisfun.com/triangle.html" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-emerald-800 hover:underline">
+                    Math is Fun: Properties
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.cuemath.com/geometry/properties-of-a-triangle/" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-emerald-800 hover:underline">
+                    Cuemath: Formula Guide
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mathopenref.com/triangle.html" target="_blank" rel="noopener noreferrer" className="text-emerald-600 hover:text-emerald-800 hover:underline">
+                    Math Open Reference
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Card 3: Practice & Quizzes */}
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-100 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center text-white mb-4 shadow-md">
+                <FontAwesomeIcon icon={faGraduationCap} className="w-6 h-6" />
+              </div>
+              <h3 className="font-semibold text-lg text-gray-800 mb-2">Practice & Tests</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Test your knowledge with exercises, interactive quizzes, and videos.
+              </p>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="https://www.khanacademy.org/math/geometry-home/triangles" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-800 hover:underline">
+                    Khan Academy: Triangles
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.khanacademy.org/math/geometry-home/triangles/triangle-properties/v/triangle-median-altitude-and-centroid" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-800 hover:underline">
+                    Khan: Medians & Centroids
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.mathsisfun.com/pythagoras.html" target="_blank" rel="noopener noreferrer" className="text-purple-600 hover:text-purple-800 hover:underline">
+                    Pythagorean Theorem Quiz
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
