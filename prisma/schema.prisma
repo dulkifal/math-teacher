@@ -12,9 +12,12 @@ datasource db {
   provider = "postgresql"
 }
 model UserScore {
-  id        Int    @id @default(autoincrement())
-  userId    String @unique
-  score     Int    @default(0)
+  id               Int      @id @default(autoincrement())
+  userId           String   @unique
+  score            Int      @default(0)
+  currentStreak    Int      @default(0)
+  highestStreak    Int      @default(0)
+  lastActivityAt   DateTime?
 }
 
 model UserProgress {
@@ -36,3 +39,22 @@ model QuizAttempt {
   createdAt DateTime @default(now())
 }
 
+model ConceptMastery {
+  id          String   @id @default(cuid())
+  userId      String
+  conceptId   String
+  proficiency Float    @default(0.0) // 0.0 to 1.0 (or 0 to 100)
+  updatedAt   DateTime @updatedAt
+
+  @@unique([userId, conceptId])
+}
+
+model AnswerHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  conceptId   String
+  questionId  String
+  isCorrect   Boolean
+  timeSpentMs Int?
+  createdAt   DateTime @default(now())
+}

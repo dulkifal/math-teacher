@@ -25,6 +25,8 @@ const allLessons = [
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
   const [score, setScore] = useState(0);
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [highestStreak, setHighestStreak] = useState(0);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [quizAttempts, setQuizAttempts] = useState<QuizAttempt[]>([]);
 
@@ -36,6 +38,8 @@ export default function Dashboard() {
       ])
         .then(([scoreRes, progressRes]) => {
           setScore(scoreRes.data.score || 0);
+          setCurrentStreak(scoreRes.data.currentStreak || 0);
+          setHighestStreak(scoreRes.data.highestStreak || 0);
           setCompletedLessons(progressRes.data.completedLessons || []);
           setQuizAttempts(progressRes.data.quizAttempts || []);
         })
@@ -93,12 +97,30 @@ export default function Dashboard() {
             <p className="text-blue-100 text-lg">
               You are making stellar progress. Let&apos;s learn some more math today!
             </p>
+            {currentStreak > 0 && (
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-sm font-bold">
+                <span className="text-orange-300 text-lg">🔥</span>
+                <span>{currentStreak} day streak!</span>
+                {highestStreak > currentStreak && (
+                  <span className="text-blue-200 font-normal text-xs">Best: {highestStreak}</span>
+                )}
+              </div>
+            )}
           </div>
-          <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/20">
-            <span className="text-4xl">🏆</span>
-            <div>
-              <div className="text-sm text-blue-200 font-semibold uppercase tracking-wider">Overall Points</div>
-              <div className="text-3xl font-black">{score}</div>
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/20 flex items-center gap-3">
+              <span className="text-4xl">🏆</span>
+              <div>
+                <div className="text-sm text-blue-200 font-semibold uppercase tracking-wider">Overall Points</div>
+                <div className="text-3xl font-black">{score}</div>
+              </div>
+            </div>
+            <div className="bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/20 flex items-center gap-3">
+              <span className="text-4xl">🔥</span>
+              <div>
+                <div className="text-sm text-blue-200 font-semibold uppercase tracking-wider">Daily Streak</div>
+                <div className="text-3xl font-black">{currentStreak} <span className="text-sm font-normal text-blue-200">days</span></div>
+              </div>
             </div>
           </div>
         </div>

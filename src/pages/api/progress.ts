@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           create: { userId, lessonId, completed: true },
         });
         return res.status(200).json({ success: true, progress });
-      } else if (action === "submit_quiz") {
+      } else if (action === "submit_quiz" || action === "quiz_attempt") {
         if (!topic || score === undefined || total === undefined) {
           return res.status(400).json({ error: "Missing topic, score, or total for quiz submission" });
         }
