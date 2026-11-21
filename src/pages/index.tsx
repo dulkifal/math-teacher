@@ -6,18 +6,23 @@ import { useState, useEffect } from "react";
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const topics = [
-  { name: "Angles & Transversals",  href: "/angle",      icon: "📐", tag: "Geometry"       },
-  { name: "Speed & Velocity",       href: "/speed",      icon: "🏎️", tag: "Physics"        },
-  { name: "Percentages & Tax",      href: "/percentage", icon: "🏷️", tag: "Applied Math"   },
-  { name: "Interest & Money",       href: "/interest",   icon: "💰", tag: "Financial Math" },
-  { name: "Time & Clocks",          href: "/time",       icon: "⏰", tag: "Applied Math"   },
-  { name: "Fractions Playground",   href: "/fractions",  icon: "🍕", tag: "Arithmetic"     },
-  { name: "Triangles",              href: "/triangle",   icon: "🔺", tag: "Geometry"       },
-  { name: "Addition & Subtraction", href: "/addition",   icon: "➕", tag: "Arithmetic"     },
-  { name: "Symmetry",               href: "/symmetry",   icon: "🎨", tag: "Visual Math"    },
-  { name: "Cube Roots",             href: "/cube",       icon: "🧊", tag: "Algebra"        },
-  { name: "Rational Numbers",       href: "/rational",   icon: "➗", tag: "Number Theory"  },
-  { name: "Linear Grapher",         href: "/grapher",    icon: "📉", tag: "Algebra"        },
+  { name: "Angles & Transversals", href: "/angle", icon: "📐", tag: "Geometry" },
+  { name: "Speed & Velocity", href: "/speed", icon: "🏎️", tag: "Physics" },
+  { name: "Gravity & Projectiles", href: "/projectile", icon: "🚀", tag: "Physics" },
+  { name: "Percentages & Tax", href: "/percentage", icon: "🏷️", tag: "Applied Math" },
+  { name: "Accounting & Ledgers", href: "/accounting", icon: "⚖️", tag: "Financial Math" },
+  { name: "Interest & Money", href: "/interest", icon: "💰", tag: "Financial Math" },
+  { name: "Probability & Monty Hall", href: "/probability", icon: "🎲", tag: "Applied Math" },
+  { name: "Perimeter & Area", href: "/area", icon: "🏡", tag: "Geometry" },
+  { name: "Time & Clocks", href: "/time", icon: "⏰", tag: "Applied Math" },
+  { name: "Integers & Signs", href: "/integers", icon: "🌡️", tag: "Arithmetic" },
+  { name: "Fractions Playground", href: "/fractions", icon: "🍕", tag: "Arithmetic" },
+  { name: "Triangles", href: "/triangle", icon: "🔺", tag: "Geometry" },
+  { name: "Addition & Subtraction", href: "/addition", icon: "➕", tag: "Arithmetic" },
+  { name: "Symmetry", href: "/symmetry", icon: "🎨", tag: "Visual Math" },
+  { name: "Cube Roots", href: "/cube", icon: "🧊", tag: "Algebra" },
+  { name: "Rational Numbers", href: "/rational", icon: "➗", tag: "Number Theory" },
+  { name: "Linear Grapher", href: "/grapher", icon: "📉", tag: "Algebra" },
 ];
 
 const features = [
@@ -54,10 +59,10 @@ const features = [
 ];
 
 const stats = [
-  { value: "8",    label: "Interactive Lessons" },
-  { value: "3",    label: "Difficulty Levels"   },
-  { value: "100%", label: "Free to Use"          },
-  { value: "∞",    label: "Adaptive Questions"   },
+  { value: "17", label: "Interactive Lessons" },
+  { value: "3", label: "Difficulty Levels" },
+  { value: "100%", label: "Free to Use" },
+  { value: "∞", label: "Adaptive Questions" },
 ];
 
 const testimonials = [
@@ -242,9 +247,9 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { step: "01", title: "Pick a Topic",    desc: "Choose from 8 interactive lessons covering geometry, algebra, and arithmetic.", icon: "🗂️" },
-                { step: "02", title: "Explore Visually",desc: "Drag, slide, and interact. See concepts come alive in real time.",              icon: "🖱️" },
-                { step: "03", title: "Quiz & Track",    desc: "Take an adaptive quiz, earn XP, track mastery, and unlock achievements.",      icon: "🏆" },
+                { step: "01", title: "Pick a Topic", desc: "Choose from 8 interactive lessons covering geometry, algebra, and arithmetic.", icon: "🗂️" },
+                { step: "02", title: "Explore Visually", desc: "Drag, slide, and interact. See concepts come alive in real time.", icon: "🖱️" },
+                { step: "03", title: "Quiz & Track", desc: "Take an adaptive quiz, earn XP, track mastery, and unlock achievements.", icon: "🏆" },
               ].map(s => (
                 <div key={s.step} className="text-center">
                   <div className="w-14 h-14 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">
@@ -349,10 +354,10 @@ export default function Home() {
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Platform</h4>
                 <ul className="space-y-2">
                   {[
-                    { label: "Dashboard",     href: "/dashboard"  },
-                    { label: "Resources",     href: "/resources"  },
-                    { label: "Fractions",     href: "/fractions"  },
-                    { label: "Linear Grapher",href: "/grapher"    },
+                    { label: "Dashboard", href: "/dashboard" },
+                    { label: "Resources", href: "/resources" },
+                    { label: "Fractions", href: "/fractions" },
+                    { label: "Linear Grapher", href: "/grapher" },
                   ].map(l => (
                     <li key={l.label}>
                       <Link href={l.href} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">

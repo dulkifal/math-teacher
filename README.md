@@ -13,13 +13,18 @@
 
 ## ✨ Features
 
-### 🎓 12 Interactive Lessons
+### 🎓 17 Interactive Lessons
 | Lesson | Topic | What you can do |
 |---|---|---|
 | 🏎️ Speed & Velocity | Physics | Drag race simulator, D=S×T formula triangle, average speed paradox |
+| 🚀 Gravity & Projectiles | Physics | Cannon trajectory sandbox, 45° maximum range, planetary gravity (Moon/Mars) |
 | 🏷️ Percentages & Tax | Applied Math | 10x10 grid visualizer, shopping mall discount & tax calculator |
+| ⚖️ Accounting & Double-Entry | Financial Math | The golden equation seesaw, T-accounts ledger, DEALER rules & balanced worksheet |
 | 💰 Interest & Money | Financial Math | Simple vs compound growth curves, Rule of 72 & doubling penny |
+| 🎲 Probability & Monty Hall | Applied Math | Monte Carlo coin toss law of large numbers, 3-doors game show, birthday paradox |
+| 🏡 Perimeter & Area | Geometry | Dynamic garden designer, shape optimization paradox, honeycomb geometry |
 | ⏰ Time & Clocks | Applied Math | Interactive analog & digital clock, elapsed time journey calculator |
+| 🌡️ Integers & Signs | Arithmetic | Elevation & submarine sea depth, multi-scale thermometer, signed multiplication rules |
 | 🍕 Fractions | Arithmetic | Pizza slice comparisons, chocolate bar models & equivalence explorer |
 | 📐 Angles | Geometry | Drag rays to form angles; explore transversal properties |
 | 🔺 Triangles | Geometry | Drag vertices; see medians, altitudes, Pythagorean theorem update live |

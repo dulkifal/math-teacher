@@ -10,30 +10,35 @@ const lessonGroups = [
     groupLabel: "Geometry & Physics",
     color: "text-blue-600",
     lessons: [
-      { name: "Speed & Velocity",       href: "/speed",      icon: "🏎️", desc: "Kinematics & race simulator"   },
-      { name: "Angles & Transversals",  href: "/angle",      icon: "📐", desc: "Angle types & parallel lines"   },
-      { name: "Triangles",              href: "/triangle",   icon: "🔺", desc: "Medians, altitudes, Pythagoras" },
-      { name: "Symmetry",               href: "/symmetry",   icon: "🎨", desc: "Reflection & rotation symmetry" },
+      { name: "Speed & Velocity", href: "/speed", icon: "🏎️", desc: "Kinematics & race simulator" },
+      { name: "Gravity & Projectiles", href: "/projectile", icon: "🚀", desc: "Cannon trajectory & gravity" },
+      { name: "Angles & Transversals", href: "/angle", icon: "📐", desc: "Angle types & parallel lines" },
+      { name: "Triangles", href: "/triangle", icon: "🔺", desc: "Medians, altitudes, Pythagoras" },
+      { name: "Perimeter & Area", href: "/area", icon: "🏡", desc: "Shape optimization & paradox" },
+      { name: "Symmetry", href: "/symmetry", icon: "🎨", desc: "Reflection & rotation symmetry" },
     ],
   },
   {
-    groupLabel: "Algebra & Finance",
+    groupLabel: "Algebra & Number Sense",
     color: "text-violet-600",
     lessons: [
-      { name: "Interest & Money",       href: "/interest",   icon: "💰", desc: "Simple & compound growth"       },
-      { name: "Cube Roots",             href: "/cube",       icon: "🧊", desc: "Perfect cubes & adaptive quiz"  },
-      { name: "Linear Grapher",         href: "/grapher",    icon: "📉", desc: "Drag slope and y-intercept"     },
+      { name: "Integers & Signs", href: "/integers", icon: "🌡️", desc: "Elevation, depth & sign rules" },
+      { name: "Cube Roots", href: "/cube", icon: "🧊", desc: "Perfect cubes & adaptive quiz" },
+      { name: "Linear Grapher", href: "/grapher", icon: "📉", desc: "Drag slope and y-intercept" },
+      { name: "Rational Numbers", href: "/rational", icon: "➗", desc: "Decimals, ratios, number line" },
+      { name: "Addition & Subtraction", href: "/addition", icon: "➕", desc: "Number-line visualizer" },
     ],
   },
   {
-    groupLabel: "Arithmetic & Life Math",
+    groupLabel: "Probability & Life Math",
     color: "text-emerald-600",
     lessons: [
-      { name: "Percentages & Tax",      href: "/percentage", icon: "🏷️", desc: "100-grid & discount simulator"  },
-      { name: "Time & Clocks",          href: "/time",       icon: "⏰", desc: "Elapsed time & clock math"      },
-      { name: "Fractions Playground",   href: "/fractions",  icon: "🍕", desc: "Pizza slices & comparisons"     },
-      { name: "Addition & Subtraction", href: "/addition",   icon: "➕", desc: "Number-line visualizer"          },
-      { name: "Rational Numbers",       href: "/rational",   icon: "➗", desc: "Decimals, ratios, number line"   },
+      { name: "Accounting & Ledgers", href: "/accounting", icon: "⚖️", desc: "Double-entry, T-accounts & worksheet" },
+      { name: "Probability & Monty Hall", href: "/probability", icon: "🎲", desc: "Monte Carlo & 3-door paradox" },
+      { name: "Percentages & Tax", href: "/percentage", icon: "🏷️", desc: "100-grid & discount simulator" },
+      { name: "Interest & Money", href: "/interest", icon: "💰", desc: "Simple & compound growth" },
+      { name: "Time & Clocks", href: "/time", icon: "⏰", desc: "Elapsed time & clock math" },
+      { name: "Fractions Playground", href: "/fractions", icon: "🍕", desc: "Pizza slices & comparisons" },
     ],
   },
 ];
@@ -74,7 +79,7 @@ function LessonsDropdown({ onClose }: { onClose: () => void }) {
         ))}
       </div>
       <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-        <span className="text-xs text-gray-400">8 lessons · adaptive quizzes · mastery tracking</span>
+        <span className="text-xs text-gray-400">17 lessons · adaptive quizzes · mastery tracking</span>
         <Link
           href="/#topics"
           onClick={onClose}
@@ -140,9 +145,8 @@ export default function Navbar() {
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setLessonsOpen(o => !o)}
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                  lessonsOpen ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${lessonsOpen ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
               >
                 Lessons
                 <svg
@@ -159,9 +163,8 @@ export default function Navbar() {
             <Show when="signed-in">
               <Link
                 href="/dashboard"
-                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                  isActive("/dashboard") ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${isActive("/dashboard") ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
               >
                 <span className="text-base">📊</span>
                 My Progress
@@ -171,9 +174,8 @@ export default function Navbar() {
             {/* Resources */}
             <Link
               href="/resources"
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                isActive("/resources") ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-              }`}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-colors ${isActive("/resources") ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
             >
               <span className="text-base">📚</span>
               Resources
@@ -253,9 +255,8 @@ export default function Navbar() {
                       <Link
                         key={lesson.name}
                         href={lesson.href}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                          isActive(lesson.href) ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-50"
-                        }`}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${isActive(lesson.href) ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-50"
+                          }`}
                       >
                         <span className="text-lg">{lesson.icon}</span>
                         <div>
@@ -274,18 +275,16 @@ export default function Navbar() {
               <Show when="signed-in">
                 <Link
                   href="/dashboard"
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                    isActive("/dashboard") ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-50"
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${isActive("/dashboard") ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-50"
+                    }`}
                 >
                   <span className="text-lg">📊</span> My Progress
                 </Link>
               </Show>
               <Link
                 href="/resources"
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  isActive("/resources") ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-50"
-                }`}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${isActive("/resources") ? "bg-blue-50 text-blue-600" : "text-gray-700 hover:bg-gray-50"
+                  }`}
               >
                 <span className="text-lg">📚</span> Resources
               </Link>
@@ -310,9 +309,8 @@ export default function Navbar() {
         <div className="grid grid-cols-4 h-16">
           <Link
             href="/"
-            className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${
-              isActive("/") ? "text-blue-600" : "text-gray-400"
-            }`}
+            className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${isActive("/") ? "text-blue-600" : "text-gray-400"
+              }`}
           >
             <span className="text-xl">🏠</span>
             <span>Home</span>
@@ -320,9 +318,8 @@ export default function Navbar() {
 
           <button
             onClick={() => setMobileMenuOpen(o => !o)}
-            className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${
-              mobileMenuOpen ? "text-blue-600" : "text-gray-400"
-            }`}
+            className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${mobileMenuOpen ? "text-blue-600" : "text-gray-400"
+              }`}
           >
             <span className="text-xl">📘</span>
             <span>Lessons</span>
@@ -331,9 +328,8 @@ export default function Navbar() {
           <Show when="signed-in">
             <Link
               href="/dashboard"
-              className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${
-                isActive("/dashboard") ? "text-blue-600" : "text-gray-400"
-              }`}
+              className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${isActive("/dashboard") ? "text-blue-600" : "text-gray-400"
+                }`}
             >
               <span className="text-xl">📊</span>
               <span>Progress</span>
@@ -350,9 +346,8 @@ export default function Navbar() {
 
           <Link
             href="/resources"
-            className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${
-              isActive("/resources") ? "text-blue-600" : "text-gray-400"
-            }`}
+            className={`flex flex-col items-center justify-center gap-0.5 text-xs font-semibold transition-colors ${isActive("/resources") ? "text-blue-600" : "text-gray-400"
+              }`}
           >
             <span className="text-xl">📚</span>
             <span>Resources</span>

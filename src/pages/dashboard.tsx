@@ -13,9 +13,14 @@ type QuizAttempt = {
 
 const allLessons = [
   { id: "speed", name: "Speed & Velocity", icon: "🏎️", href: "/speed", desc: "Kinematics, D=S×T formula & race simulator." },
+  { id: "projectile", name: "Gravity & Projectiles", icon: "🚀", href: "/projectile", desc: "Cannon ballistic trajectory, 45° rule & planetary gravity." },
   { id: "percentage", name: "Percentages & Tax", icon: "🏷️", href: "/percentage", desc: "100-grid visualizer & shopping discounts." },
+  { id: "accounting", name: "Accounting & Double-Entry", icon: "⚖️", href: "/accounting", desc: "The golden equation, T-accounts ledger & balanced worksheet." },
   { id: "interest", name: "Simple & Compound Interest", icon: "💰", href: "/interest", desc: "Rule of 72 & exponential wealth growth." },
+  { id: "probability", name: "Probability & Monty Hall", icon: "🎲", href: "/probability", desc: "Monte Carlo flipper, 3-doors paradox & birthday problem." },
+  { id: "area", name: "Perimeter & Area Optimization", icon: "🏡", href: "/area", desc: "Garden planner, isoperimetric paradox & honeycomb physics." },
   { id: "time", name: "Time & Clocks", icon: "⏰", href: "/time", desc: "Elapsed time calculations & analog clocks." },
+  { id: "integers", name: "Integers & Negative Numbers", icon: "🌡️", href: "/integers", desc: "Sea depth elevation, multi-scale thermometer & sign rules." },
   { id: "fractions", name: "Fractions", icon: "🍕", href: "/fractions", desc: "Explore fraction pizza slices & comparisons." },
   { id: "angle", name: "Angles", icon: "📐", href: "/angle", desc: "Understand angles and transversals." },
   { id: "triangle", name: "Triangles", icon: "🔺", href: "/triangle", desc: "Explore altitudes and medians." },
