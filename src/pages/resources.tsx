@@ -301,8 +301,8 @@ export default function Resources() {
                   <h1 className="text-4xl font-extrabold tracking-tight">Math Learning Resources</h1>
                 </div>
                 <p className="text-blue-100 text-lg max-w-2xl">
-                  Hand-picked resources from the world's best math educators and platforms.
-                  Whether you're a beginner or training for olympiads — we've got you covered.
+                  Hand-picked resources from the world&apos;s best math educators and platforms.
+                  Whether you&apos;re a beginner or training for olympiads — we&apos;ve got you covered.
                 </p>
               </div>
               <div className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-2xl px-6 py-4 backdrop-blur-sm">
@@ -384,7 +384,7 @@ export default function Resources() {
             <section className="mb-10">
               <div className="flex items-center gap-2 mb-5">
                 <span className="text-xl">🏆</span>
-                <h2 className="text-xl font-black text-gray-900">Editor's Top Picks</h2>
+                <h2 className="text-xl font-black text-gray-900">Editor&apos;s Top Picks</h2>
                 <span className="text-slate-400 text-sm">· Our recommended starting points</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -598,7 +598,7 @@ export default function Resources() {
           <div className="mt-12 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-center text-white shadow-xl">
             <h2 className="text-2xl font-black mb-2">Ready to put it into practice?</h2>
             <p className="text-blue-100 mb-6">
-              Jump back into our interactive lessons and apply what you've learned.
+              Jump back into our interactive lessons and apply what you&apos;ve learned.
             </p>
             <Link
               href="/"

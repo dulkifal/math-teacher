@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 
 // Define a scaling factor for converting pixels to 'cm' for display purposes
 const PIXELS_PER_CM = 10; // 10 pixels = 1 cm
@@ -123,13 +123,7 @@ const TriangleVisualizer: React.FC<TriangleProps> = ({
   const [selectedVertex, setSelectedVertex] = useState<VertexKey>('A');
 
 
-  const [triangleData, setTriangleData] = useState({
-    ab: 0, bc: 0, ca: 0,
-    angleA: 0, angleB: 0, angleC: 0,
-    area: 0, perimeter: 0,
-  });
-
-  useEffect(() => {
+  const triangleData = useMemo(() => {
     const { A, B, C } = vertices;
 
     const ab = calculateDistance(A, B);
@@ -142,10 +136,10 @@ const TriangleVisualizer: React.FC<TriangleProps> = ({
 
     // Calculate Area (Heron's formula)
     const s = (ab + bc + ca) / 2; // semi-perimeter
-    const area = Math.sqrt(s * (s - ab) * (s - bc) * (s - ca));
+    const area = Math.sqrt(Math.max(0, s * (s - ab) * (s - bc) * (s - ca)));
     const perimeter = ab + bc + ca;
 
-    setTriangleData({ ab, bc, ca, angleA, angleB, angleC, area, perimeter });
+    return { ab, bc, ca, angleA, angleB, angleC, area, perimeter };
   }, [vertices]);
 
   const handleMouseDown = useCallback((vertexKey: VertexKey) => () => {

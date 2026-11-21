@@ -122,6 +122,24 @@ export default function FractionsPlayground() {
   const renderPizzaSlices = (numerator: number, denominator: number) => {
     const center = 100;
     const radius = 80;
+
+    // Handle single slice (whole)
+    if (denominator <= 1) {
+      const isFilled = numerator >= 1;
+      return [
+        <circle
+          key="single-whole"
+          cx={center}
+          cy={center}
+          r={radius}
+          fill={isFilled ? "#F59E0B" : "#F3F4F6"}
+          stroke="#FFFFFF"
+          strokeWidth="2"
+          className="transition-colors duration-300 hover:brightness-95 cursor-pointer"
+        />,
+      ];
+    }
+
     const slices = [];
 
     for (let i = 0; i < denominator; i++) {
@@ -250,7 +268,7 @@ export default function FractionsPlayground() {
               
               {/* Pizza Pie */}
               <div className="relative">
-                <svg width="200" height="200" className="filter drop-shadow-md">
+                <svg width="200" height="200" viewBox="0 0 200 200" className="filter drop-shadow-md">
                   {renderPizzaSlices(num, den)}
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -341,9 +359,25 @@ export default function FractionsPlayground() {
               <div className="p-5 bg-gray-50 rounded-2xl border border-gray-100 flex flex-col items-center gap-4">
                 <h4 className="font-extrabold text-blue-600 text-lg">Fraction A</h4>
                 
-                <svg width="120" height="120">
-                  {renderPizzaSlices(numA, denA)}
-                </svg>
+                {/* Pizza Circle */}
+                <div className="relative">
+                  <svg width="160" height="160" viewBox="0 0 200 200" className="filter drop-shadow-md">
+                    {renderPizzaSlices(numA, denA)}
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="bg-white/95 px-3 py-1 rounded-full border border-gray-100 shadow-sm font-extrabold text-blue-700 text-base">
+                      {numA} / {denA}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chocolate Bar representation */}
+                <div className="w-full space-y-1.5">
+                  <div className="text-xs font-semibold text-gray-500">Bar model:</div>
+                  <div className="flex w-full bg-gray-200 p-1.5 rounded-xl gap-1 overflow-x-auto">
+                    {renderChocolateBar(numA, denA)}
+                  </div>
+                </div>
 
                 <div className="text-2xl font-black text-gray-800">{numA} / {denA} ({(numA/denA).toFixed(2)})</div>
 
@@ -381,9 +415,25 @@ export default function FractionsPlayground() {
               <div className="p-5 bg-gray-50 rounded-2xl border border-gray-100 flex flex-col items-center gap-4">
                 <h4 className="font-extrabold text-indigo-600 text-lg">Fraction B</h4>
                 
-                <svg width="120" height="120">
-                  {renderPizzaSlices(numB, denB)}
-                </svg>
+                {/* Pizza Circle */}
+                <div className="relative">
+                  <svg width="160" height="160" viewBox="0 0 200 200" className="filter drop-shadow-md">
+                    {renderPizzaSlices(numB, denB)}
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div className="bg-white/95 px-3 py-1 rounded-full border border-gray-100 shadow-sm font-extrabold text-indigo-700 text-base">
+                      {numB} / {denB}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Chocolate Bar representation */}
+                <div className="w-full space-y-1.5">
+                  <div className="text-xs font-semibold text-gray-500">Bar model:</div>
+                  <div className="flex w-full bg-gray-200 p-1.5 rounded-xl gap-1 overflow-x-auto">
+                    {renderChocolateBar(numB, denB)}
+                  </div>
+                </div>
 
                 <div className="text-2xl font-black text-gray-800">{numB} / {denB} ({(numB/denB).toFixed(2)})</div>
 

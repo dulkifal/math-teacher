@@ -105,9 +105,15 @@ export default function Navbar() {
 
   // Close mobile menu on route change
   useEffect(() => {
-    setMobileMenuOpen(false);
-    setLessonsOpen(false);
-  }, [router.pathname]);
+    const handleRouteChange = () => {
+      setMobileMenuOpen(false);
+      setLessonsOpen(false);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
 
   const isActive = (href: string) => router.pathname === href;
 

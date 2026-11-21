@@ -121,17 +121,26 @@ export default function Angle() {
           </svg>
 
           {/* Draggables */}
-          <DraggablePoint position={pointA} onDrag={handleDragA} color="#EF4444" />
-          <DraggablePoint position={pointB} onDrag={handleDragB} color="#3B82F6" />
+          {(() => {
+            const bounds = { minX: 20, maxX: 380, minY: 20, maxY: 380 };
+            return (
+              <>
+                <DraggablePoint position={pointA} onDrag={handleDragA} color="#EF4444" label="A" bounds={bounds} />
+                <DraggablePoint position={pointB} onDrag={handleDragB} color="#3B82F6" label="B" bounds={bounds} />
 
-          {otherPoints.map((point, index) => (
-            <DraggablePoint
-              key={`dynamic-drag-${index}`}
-              position={point}
-              onDrag={(newPosition) => handleDragOtherPoint(index, newPosition)}
-              color={`hsl(${index * 60 + 120}, 70%, 50%)`}
-            />
-          ))}
+                {otherPoints.map((point, index) => (
+                  <DraggablePoint
+                    key={`dynamic-drag-${index}`}
+                    position={point}
+                    onDrag={(newPosition) => handleDragOtherPoint(index, newPosition)}
+                    color={`hsl(${index * 60 + 120}, 70%, 50%)`}
+                    label={`P${index + 1}`}
+                    bounds={bounds}
+                  />
+                ))}
+              </>
+            );
+          })()}
         </div>
       </div>
 

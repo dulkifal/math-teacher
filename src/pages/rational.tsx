@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useUser } from "@/lib/auth";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSlidersH, faTrophy, faCheckCircle, faAward, faCheck, faInfoCircle, faSquare, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faSlidersH, faTrophy, faCheckCircle, faAward, faCheck, faInfoCircle, faSquare } from "@fortawesome/free-solid-svg-icons";
 
 // Helper to calculate GCD for simplifying fractions
 const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
@@ -43,10 +43,10 @@ export default function RationalNumbersPage() {
   const [userAnswers, setUserAnswers] = useState<{ [key: number]: string }>({});
   const [quizFeedback, setQuizFeedback] = useState<string>("");
 
-  useEffect(() => {
-    // Reset shaded cells when grid size changes
-    setShadedCells(Array(gridSize * gridSize).fill(false));
-  }, [gridSize]);
+  const changeGridSize = (size: 2 | 3 | 4) => {
+    setGridSize(size);
+    setShadedCells(Array(size * size).fill(false));
+  };
 
   // Fetch score & completion from DB
   useEffect(() => {
@@ -411,9 +411,9 @@ export default function RationalNumbersPage() {
                 </div>
 
                 <div className="flex bg-slate-100 p-0.5 rounded-lg text-xs font-semibold">
-                  <button onClick={() => setGridSize(2)} className={`px-2 py-1 rounded-md ${gridSize === 2 ? "bg-white text-emerald-600 shadow" : "text-slate-500"}`}>2x2</button>
-                  <button onClick={() => setGridSize(3)} className={`px-2 py-1 rounded-md ${gridSize === 3 ? "bg-white text-emerald-600 shadow" : "text-slate-500"}`}>3x3</button>
-                  <button onClick={() => setGridSize(4)} className={`px-2 py-1 rounded-md ${gridSize === 4 ? "bg-white text-emerald-600 shadow" : "text-slate-500"}`}>4x4</button>
+                  <button onClick={() => changeGridSize(2)} className={`px-2 py-1 rounded-md ${gridSize === 2 ? "bg-white text-emerald-600 shadow" : "text-slate-500"}`}>2x2</button>
+                  <button onClick={() => changeGridSize(3)} className={`px-2 py-1 rounded-md ${gridSize === 3 ? "bg-white text-emerald-600 shadow" : "text-slate-500"}`}>3x3</button>
+                  <button onClick={() => changeGridSize(4)} className={`px-2 py-1 rounded-md ${gridSize === 4 ? "bg-white text-emerald-600 shadow" : "text-slate-500"}`}>4x4</button>
                 </div>
               </div>
 

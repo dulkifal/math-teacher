@@ -17,7 +17,7 @@ export default function Addition() {
   const [num1, setNum1] = useState<number>(5);
   const [num2, setNum2] = useState<number>(3);
   const [operation, setOperation] = useState<"add" | "subtract">("add");
-  const [result, setResult] = useState<number>(8);
+  const result = operation === "add" ? (Number(num1) || 0) + (Number(num2) || 0) : (Number(num1) || 0) - (Number(num2) || 0);
 
   // Quiz States
   const [quizScore, setQuizScore] = useState<number | null>(null);
@@ -46,17 +46,6 @@ export default function Addition() {
       explanation: "According to the Identity Property, adding 0 to any number leaves it unchanged. So x = 0.",
     },
   ];
-
-  // Calculate result when numbers or operation change
-  useEffect(() => {
-    const val1 = Number(num1) || 0;
-    const val2 = Number(num2) || 0;
-    if (operation === "add") {
-      setResult(val1 + val2);
-    } else {
-      setResult(val1 - val2);
-    }
-  }, [num1, num2, operation]);
 
   // Fetch completion state on mount
   useEffect(() => {

@@ -46,12 +46,9 @@ export default function QuizEngine({
   const [feedback, setFeedback] = useState<FeedbackState>({ type: "", message: "" });
   const [finished, setFinished] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [startTime, setStartTime] = useState<number>(Date.now());
-  const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
-  const [consecutiveWrong, setConsecutiveWrong] = useState(0);
+  const startTimeRef = useRef<number>(0);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showHint, setShowHint] = useState(false);
-  const [animate, setAnimate] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const currentQuestion = questions[currentIdx];
@@ -60,11 +57,7 @@ export default function QuizEngine({
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
-    setStartTime(Date.now());
-    setShowHint(false);
-    setAnimate(true);
-    const t = setTimeout(() => setAnimate(false), 400);
-    return () => clearTimeout(t);
+    startTimeRef.current = Date.now();
   }, [currentIdx]);
 
   const handleSubmit = useCallback(async () => {
@@ -73,17 +66,13 @@ export default function QuizEngine({
     if (isNaN(parsed)) return;
 
     setSubmitting(true);
-    const timeSpentMs = Date.now() - startTime;
+    const timeSpentMs = Date.now() - startTimeRef.current;
     const isCorrect = parsed === currentQuestion.correctAnswer;
 
     if (isCorrect) {
       setCorrectCount((c) => c + 1);
-      setConsecutiveCorrect((c) => c + 1);
-      setConsecutiveWrong(0);
       setFeedback({ type: "correct", message: `✅ Correct! The answer is ${currentQuestion.correctAnswer}.` });
     } else {
-      setConsecutiveWrong((c) => c + 1);
-      setConsecutiveCorrect(0);
       setFeedback({ type: "wrong", message: `❌ Not quite! The answer is ${currentQuestion.correctAnswer}.` });
     }
 
@@ -105,11 +94,12 @@ export default function QuizEngine({
     }
 
     setSubmitting(false);
-  }, [feedback.type, submitting, currentQuestion, userAnswer, startTime, userId]);
+  }, [feedback.type, submitting, currentQuestion, userAnswer, userId]);
 
   const handleNext = useCallback(async () => {
     setFeedback({ type: "", message: "" });
     setUserAnswer("");
+    setShowHint(false);
 
     const isLast = currentIdx >= totalQuestions - 1;
 
@@ -182,7 +172,7 @@ export default function QuizEngine({
     : "bg-rose-50 border-rose-200 text-rose-800";
 
   return (
-    <div className={`transition-all duration-300 ${animate ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
+    <div key={currentIdx} className="transition-all duration-300 opacity-100 translate-y-0">
       {/* Progress bar */}
       <div className="mb-5">
         <div className="flex justify-between items-center mb-1.5 text-xs font-semibold text-slate-400">
