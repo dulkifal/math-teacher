@@ -13,16 +13,20 @@
 
 ## ✨ Features
 
-### 🎓 8 Interactive Lessons
+### 🎓 12 Interactive Lessons
 | Lesson | Topic | What you can do |
 |---|---|---|
+| 🏎️ Speed & Velocity | Physics | Drag race simulator, D=S×T formula triangle, average speed paradox |
+| 🏷️ Percentages & Tax | Applied Math | 10x10 grid visualizer, shopping mall discount & tax calculator |
+| 💰 Interest & Money | Financial Math | Simple vs compound growth curves, Rule of 72 & doubling penny |
+| ⏰ Time & Clocks | Applied Math | Interactive analog & digital clock, elapsed time journey calculator |
+| 🍕 Fractions | Arithmetic | Pizza slice comparisons, chocolate bar models & equivalence explorer |
 | 📐 Angles | Geometry | Drag rays to form angles; explore transversal properties |
 | 🔺 Triangles | Geometry | Drag vertices; see medians, altitudes, Pythagorean theorem update live |
 | 🎨 Symmetry | Visual Math | Reflect & rotate shapes; paper-fold hole punch simulator |
 | 🧊 Cube Roots | Algebra | 3D volume visualizer + adaptive quiz engine |
 | 📉 Linear Grapher | Algebra | Drag slope/intercept sliders; see rise-over-run triangle |
 | ➕ Addition | Arithmetic | Number-line visualizer with animated operations |
-| 🍕 Fractions | Arithmetic | Pizza slice comparisons and equivalence explorer |
 | ➗ Rational Numbers | Number Theory | Grid shading sandbox + interactive number line |
 
 ### 🧠 Adaptive Learning Engine

@@ -6,14 +6,18 @@ import { useState, useEffect } from "react";
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const topics = [
-  { name: "Angles & Transversals",  href: "/angle",    icon: "📐", tag: "Geometry"     },
-  { name: "Addition & Subtraction", href: "/addition", icon: "➕", tag: "Arithmetic"   },
-  { name: "Triangles",              href: "/triangle", icon: "🔺", tag: "Geometry"     },
-  { name: "Symmetry",               href: "/symmetry", icon: "🎨", tag: "Visual Math"  },
-  { name: "Cube Roots",             href: "/cube",     icon: "🧊", tag: "Algebra"      },
-  { name: "Rational Numbers",       href: "/rational", icon: "➗", tag: "Number Theory"},
-  { name: "Fractions",              href: "/fractions",icon: "🍕", tag: "Arithmetic"   },
-  { name: "Linear Grapher",         href: "/grapher",  icon: "📉", tag: "Algebra"      },
+  { name: "Angles & Transversals",  href: "/angle",      icon: "📐", tag: "Geometry"       },
+  { name: "Speed & Velocity",       href: "/speed",      icon: "🏎️", tag: "Physics"        },
+  { name: "Percentages & Tax",      href: "/percentage", icon: "🏷️", tag: "Applied Math"   },
+  { name: "Interest & Money",       href: "/interest",   icon: "💰", tag: "Financial Math" },
+  { name: "Time & Clocks",          href: "/time",       icon: "⏰", tag: "Applied Math"   },
+  { name: "Fractions Playground",   href: "/fractions",  icon: "🍕", tag: "Arithmetic"     },
+  { name: "Triangles",              href: "/triangle",   icon: "🔺", tag: "Geometry"       },
+  { name: "Addition & Subtraction", href: "/addition",   icon: "➕", tag: "Arithmetic"     },
+  { name: "Symmetry",               href: "/symmetry",   icon: "🎨", tag: "Visual Math"    },
+  { name: "Cube Roots",             href: "/cube",       icon: "🧊", tag: "Algebra"        },
+  { name: "Rational Numbers",       href: "/rational",   icon: "➗", tag: "Number Theory"  },
+  { name: "Linear Grapher",         href: "/grapher",    icon: "📉", tag: "Algebra"        },
 ];
 
 const features = [

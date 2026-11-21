@@ -7,29 +7,33 @@ import { useRouter } from "next/router";
 
 const lessonGroups = [
   {
-    groupLabel: "Geometry",
+    groupLabel: "Geometry & Physics",
     color: "text-blue-600",
     lessons: [
-      { name: "Angles & Transversals", href: "/angle",    icon: "📐", desc: "Angle types & parallel lines"      },
-      { name: "Triangles",             href: "/triangle", icon: "🔺", desc: "Medians, altitudes, Pythagoras"    },
-      { name: "Symmetry",              href: "/symmetry", icon: "🎨", desc: "Reflectional & rotational symmetry" },
+      { name: "Speed & Velocity",       href: "/speed",      icon: "🏎️", desc: "Kinematics & race simulator"   },
+      { name: "Angles & Transversals",  href: "/angle",      icon: "📐", desc: "Angle types & parallel lines"   },
+      { name: "Triangles",              href: "/triangle",   icon: "🔺", desc: "Medians, altitudes, Pythagoras" },
+      { name: "Symmetry",               href: "/symmetry",   icon: "🎨", desc: "Reflection & rotation symmetry" },
     ],
   },
   {
-    groupLabel: "Algebra",
+    groupLabel: "Algebra & Finance",
     color: "text-violet-600",
     lessons: [
-      { name: "Cube Roots",     href: "/cube",    icon: "🧊", desc: "Perfect cubes & adaptive quiz" },
-      { name: "Linear Grapher", href: "/grapher", icon: "📉", desc: "Drag slope and y-intercept"    },
+      { name: "Interest & Money",       href: "/interest",   icon: "💰", desc: "Simple & compound growth"       },
+      { name: "Cube Roots",             href: "/cube",       icon: "🧊", desc: "Perfect cubes & adaptive quiz"  },
+      { name: "Linear Grapher",         href: "/grapher",    icon: "📉", desc: "Drag slope and y-intercept"     },
     ],
   },
   {
-    groupLabel: "Arithmetic",
+    groupLabel: "Arithmetic & Life Math",
     color: "text-emerald-600",
     lessons: [
-      { name: "Addition & Subtraction", href: "/addition",  icon: "➕", desc: "Number-line visualizer"         },
-      { name: "Fractions",              href: "/fractions",  icon: "🍕", desc: "Pizza slices & comparisons"    },
-      { name: "Rational Numbers",       href: "/rational",   icon: "➗", desc: "Decimals, ratios, number line"  },
+      { name: "Percentages & Tax",      href: "/percentage", icon: "🏷️", desc: "100-grid & discount simulator"  },
+      { name: "Time & Clocks",          href: "/time",       icon: "⏰", desc: "Elapsed time & clock math"      },
+      { name: "Fractions Playground",   href: "/fractions",  icon: "🍕", desc: "Pizza slices & comparisons"     },
+      { name: "Addition & Subtraction", href: "/addition",   icon: "➕", desc: "Number-line visualizer"          },
+      { name: "Rational Numbers",       href: "/rational",   icon: "➗", desc: "Decimals, ratios, number line"   },
     ],
   },
 ];

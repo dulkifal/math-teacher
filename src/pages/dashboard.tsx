@@ -12,13 +12,17 @@ type QuizAttempt = {
 };
 
 const allLessons = [
+  { id: "speed", name: "Speed & Velocity", icon: "🏎️", href: "/speed", desc: "Kinematics, D=S×T formula & race simulator." },
+  { id: "percentage", name: "Percentages & Tax", icon: "🏷️", href: "/percentage", desc: "100-grid visualizer & shopping discounts." },
+  { id: "interest", name: "Simple & Compound Interest", icon: "💰", href: "/interest", desc: "Rule of 72 & exponential wealth growth." },
+  { id: "time", name: "Time & Clocks", icon: "⏰", href: "/time", desc: "Elapsed time calculations & analog clocks." },
+  { id: "fractions", name: "Fractions", icon: "🍕", href: "/fractions", desc: "Explore fraction pizza slices & comparisons." },
   { id: "angle", name: "Angles", icon: "📐", href: "/angle", desc: "Understand angles and transversals." },
-  { id: "addition", name: "Addition & Subtraction", icon: "➕", href: "/addition", desc: "Visual addition on a number line." },
   { id: "triangle", name: "Triangles", icon: "🔺", href: "/triangle", desc: "Explore altitudes and medians." },
+  { id: "addition", name: "Addition & Subtraction", icon: "➕", href: "/addition", desc: "Visual addition on a number line." },
   { id: "symmetry", name: "Symmetry", icon: "🎨", href: "/symmetry", desc: "Discover rotational & reflectional symmetry." },
   { id: "cube", name: "Cube Roots", icon: "🧊", href: "/cube", desc: "Challenge yourself with cube roots." },
   { id: "rational", name: "Rational Numbers", icon: "➗", href: "/rational", desc: "Understand ratios and numbers." },
-  { id: "fractions", name: "Fractions", icon: "🍕", href: "/fractions", desc: "Explore fraction pizza slices & comparisons." },
   { id: "grapher", name: "Linear Grapher", icon: "📉", href: "/grapher", desc: "Drag slope and y-intercept interactively." },
 ];
 
