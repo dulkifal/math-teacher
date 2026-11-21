@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { Show, SignInButton, UserButton } from "@/lib/auth";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 

@@ -1,4 +1,4 @@
-import { ClerkProvider } from '@clerk/nextjs'
+import { AuthProvider } from '@/lib/auth'
 import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import Navbar from '@/components/Navbar'
@@ -52,10 +52,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="twitter:description" content="Interactive, adaptive math learning platform." />
       </Head>
 
-      <ClerkProvider>
+      <AuthProvider>
         <Navbar />
         <Component {...pageProps} />
-      </ClerkProvider>
+      </AuthProvider>
     </>
   )
 }

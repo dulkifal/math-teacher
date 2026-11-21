@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Head from "next/head";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@/lib/auth";
 import { useState, useEffect } from "react";
 
 // ─── Data ────────────────────────────────────────────────────────────────────

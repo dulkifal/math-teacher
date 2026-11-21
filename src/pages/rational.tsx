@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@/lib/auth";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSlidersH, faTrophy, faCheckCircle, faAward, faCheck, faInfoCircle, faSquare, faPlus } from "@fortawesome/free-solid-svg-icons";

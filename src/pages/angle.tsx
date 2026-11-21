@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import useMeasure from "react-use-measure";
 import { useWindowSize } from "react-use";
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@/lib/auth";
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

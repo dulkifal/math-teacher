@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUser, SignInButton } from "@clerk/nextjs";
+import { useUser, SignInButton } from "@/lib/auth";
 import Link from "next/link";
 import axios from "axios";
 
